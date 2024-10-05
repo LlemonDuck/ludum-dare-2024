@@ -7,7 +7,7 @@ public class BaseEnemy : MonoBehaviour {
 
     public float moveSpeed = 10.0f;
 
-    private bool isCollidingWithPlayer = false;
+    protected bool isCollidingWithPlayer = false;
 
     public float health = 100;
 
@@ -58,7 +58,9 @@ public class BaseEnemy : MonoBehaviour {
     }
 
     void OnCollisionExit2D(Collision2D collision) {
-        isCollidingWithPlayer = !(collision.gameObject == PlayerController.instance.gameObject);
+        if (collision.gameObject == PlayerController.instance.gameObject) {
+            isCollidingWithPlayer = false;
+        }
     }
 
     public virtual void applyDamage(float damage) {

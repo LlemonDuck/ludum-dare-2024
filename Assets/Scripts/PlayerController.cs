@@ -13,9 +13,7 @@ public class PlayerController : MonoBehaviour {
 
     public float health = 100.0f;
 
-    float damageTickTimeSeconds = 2.0f;
-
-    float collisionDamage = 5.0f;
+    float damageTickTimeSeconds = 1.0f;
 
     public BaseWeapon equippedWeapon;
 
@@ -49,27 +47,16 @@ public class PlayerController : MonoBehaviour {
                 equippedWeapon.OnAttack();
             }
         }
-
-        // Apply Damage from colliding enemies
-        if (numCollidingEnemies > 0) {
-            if (!isInIFrame()) {
-                health -= collisionDamage;
-                lastCollisionTime = Time.time;
-                Debug.Log(health);
-            }
-        }
-
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.gameObject.GetComponent<BaseEnemy>() != null) {
-            numCollidingEnemies ++;
+    public void applyDamage(float damage) {
+        if (!isInIFrame()) {
+            health -= damage;
+            lastCollisionTime = Time.time;
         }
-    }
 
-    void OnCollisionExit2D(Collision2D collision) {
-        if (collision.gameObject.GetComponent<BaseEnemy>() != null) {
-            numCollidingEnemies --;
+        if (health <= 0) {
+            GetComponent<SpriteRenderer>().color = Color.red;
         }
     }
 }

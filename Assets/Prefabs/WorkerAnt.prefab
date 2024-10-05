@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2501999796380869842}
   - component: {fileID: 7945129456974408808}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: WorkerAnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,6 +166,7 @@ MonoBehaviour:
   health: 100
   flashTime: 1
   damageColor: {r: 0.7, g: 0.1, b: 0.1, a: 1}
+  lungeDamage: 20
   attackDistance: 0
   lungeDecisionDistance: 4
   lungeDistance: 7
