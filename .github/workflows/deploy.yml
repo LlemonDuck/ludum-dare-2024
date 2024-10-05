@@ -39,6 +39,3 @@ jobs:
       - run: |
           echo ${{ secrets.SSH_DEPLOY_KEY }} > deploy.pem
           scp -i deploy.pem -r ./build ec2-user@llemonduck.dev:
-          ssh -i deploy.pem ec2-user@llemonduck.dev
-          
-          
