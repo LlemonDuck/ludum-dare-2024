@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
     public static PlayerController instance;
 
+    public GameObject weaponSocket;
+
     public new Rigidbody2D rigidbody;
 
     public float movementSpeed = 10.0f;

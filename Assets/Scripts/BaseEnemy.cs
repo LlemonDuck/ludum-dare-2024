@@ -34,5 +34,9 @@ public class BaseEnemy : MonoBehaviour {
 
     public void applyDamage(float damage) {
         health -= damage;
+
+        if (health <= 0) {
+            GameObject.Destroy(gameObject);
+        }
     }
 }

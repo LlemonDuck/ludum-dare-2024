@@ -10,7 +10,7 @@ public class BaseWeapon : MonoBehaviour {
 
     protected float attackCooldown = 0.6f;
 
-    protected float damageAmount = 10.0f;
+    public float damageAmount = 10.0f;
 
     protected bool isOnCooldown() {
         return Time.time - lastAttackTime <= attackCooldown;
@@ -36,10 +36,16 @@ public class BaseWeapon : MonoBehaviour {
 
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
-        collision.gameObject.TryGetComponent(out BaseEnemy enemy);
+    void OnTriggerEnter2D(Collider2D collider) {
+        collider.gameObject.TryGetComponent(out BaseEnemy enemy);
         if (enemy != null) {
             OnCollideWithEnemy(enemy);
         }
+    }
+
+    public void attachToPlayer() {
+        transform.SetParent(PlayerController.instance.weaponSocket.transform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
     }
 }
