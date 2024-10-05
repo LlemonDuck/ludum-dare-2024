@@ -60,4 +60,14 @@ public class BaseWeapon : MonoBehaviour {
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
     }
+
+    protected virtual IEnumerator addFreezeFrames(float time) {
+        Debug.Log("Starting freeze frames");
+
+        Time.timeScale = 0.0f;
+        yield return new WaitForSecondsRealtime(time);
+        Time.timeScale = 1.0f;
+
+        Debug.Log("Ending freeze frames");
+    }
 }

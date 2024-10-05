@@ -1,4 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Toothpick : BaseWeapon {
@@ -18,6 +21,7 @@ public class Toothpick : BaseWeapon {
     }
 
     public override void Update() {
+
         base.Update();
         if (!isAttacking() && !isOnCooldown()) {
             Vector2 direction = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
@@ -27,9 +31,9 @@ public class Toothpick : BaseWeapon {
         }
 
         if (isAttacking()) {
-            transform.localPosition = Vector2.Lerp(Vector2.zero, stabDirection * moveDistance, (Time.time - lastAttackTime)/attackDuration);
+            transform.localPosition = Vector2.Lerp(Vector2.zero, stabDirection.normalized * moveDistance, (Time.time - lastAttackTime)/attackDuration);
         } else if (isOnCooldown()) {
-            transform.localPosition = Vector2.Lerp(stabDirection * moveDistance, Vector2.zero, (Time.time - attackDuration - lastAttackTime)/attackCooldown);
+            transform.localPosition = Vector2.Lerp(stabDirection.normalized * moveDistance, Vector2.zero, (Time.time - attackDuration - lastAttackTime)/attackCooldown);
         } else if (wasOnCooldownLastFrame()) {
             transform.localPosition = Vector2.zero;
             damagedEnemies.Clear();
@@ -38,6 +42,9 @@ public class Toothpick : BaseWeapon {
 
     public override void onCollideWithEnemy(BaseEnemy enemy) {
         if (isAttacking() && !damagedEnemies.Contains(enemy)) {
+            IEnumerator coroutine = addFreezeFrames(0.05f);
+            StartCoroutine(coroutine);
+
             enemy.applyDamage(damageAmount, stabDirection, knockbackIntensity);
             damagedEnemies.Add(enemy);
         }
