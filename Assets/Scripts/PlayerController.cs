@@ -16,6 +16,9 @@ public class PlayerController : MonoBehaviour {
     float collisionDamage = 5.0f;
 
     [HideInInspector]
+    BaseWeapon equippedWeapon;
+
+    [HideInInspector]
     int numCollidingEnemies = 0;
 
     [HideInInspector]
@@ -29,6 +32,10 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    private bool isInIFrame() {
+        return Time.time - lastCollisionTime >= damageTickTimeSeconds;
+    }
+
     // Update is called once per frame
     void Update() {
         float horizontalMovement = Input.GetAxis("Horizontal");
@@ -36,11 +43,17 @@ public class PlayerController : MonoBehaviour {
 
         rigidbody.velocity = new Vector2(horizontalMovement, verticalmovement).normalized * movementSpeed;
 
+        if (Input.GetAxis("Fire1") > 0) {
+            if (equippedWeapon != null) {
+                equippedWeapon.OnAttack();
+            }
+        }
 
         // Apply Damage from colliding enemies
         if (numCollidingEnemies > 0) {
-            if (Time.time - lastCollisionTime > damageTickTimeSeconds) {
+            if (!isInIFrame()) {
                 health -= collisionDamage;
+                lastCollisionTime = Time.time;
             }
         }
 

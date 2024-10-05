@@ -29,4 +29,8 @@ public class BaseEnemy : MonoBehaviour {
     void OnCollisionExit2D(Collision2D collision) {
         isCollidingWithPlayer = !(collision.gameObject == PlayerController.instance.gameObject);
     }
+
+    public void applyDamage(float damage) {
+        
+    }
 }
