@@ -261,17 +261,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7801868498385319819, guid: ffda36132b07f084c86a679ad3fffa5a, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7801868498385319819, guid: ffda36132b07f084c86a679ad3fffa5a, type: 3}
-      propertyPath: m_Color.g
-      value: 0.18166472
-      objectReference: {fileID: 0}
     - target: {fileID: 8010911051089772262, guid: ffda36132b07f084c86a679ad3fffa5a, type: 3}
-      propertyPath: damageAmount
-      value: 50
+      propertyPath: knockbackIntensity
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -33,8 +33,12 @@ public class BaseEnemy : MonoBehaviour {
         }
     }
 
+    protected Vector2 getPlayerOffset() {
+        return PlayerController.instance.transform.position - transform.position;
+    }
+
     protected void moveToPlayer() {
-        Vector2 moveDirection = (PlayerController.instance.transform.position - transform.position).normalized;
+        Vector2 moveDirection = getPlayerOffset().normalized;
 
         if (!isCollidingWithPlayer) {
             Vector2 maxSpeed = moveDirection * moveSpeed;
@@ -57,7 +61,7 @@ public class BaseEnemy : MonoBehaviour {
         isCollidingWithPlayer = !(collision.gameObject == PlayerController.instance.gameObject);
     }
 
-    public void applyDamage(float damage) {
+    public virtual void applyDamage(float damage) {
         health -= damage;
 
         if (health <= 0) {
@@ -65,7 +69,7 @@ public class BaseEnemy : MonoBehaviour {
         }
     }
 
-    public void applyDamage(float damage, Vector2 direction, float intensity) {
+    public virtual void applyDamage(float damage, Vector2 direction, float intensity) {
         timeSinceDamage = 0.0f;
         applyDamage(damage);
 

@@ -99,7 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageAmount: 50
-  moveDistance: 5
+  moveDistance: 2
+  knockbackIntensity: 40
 --- !u!61 &2602244769273516805
 BoxCollider2D:
   m_ObjectHideFlags: 0

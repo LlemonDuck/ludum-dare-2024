@@ -353,22 +353,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 2935155546883087368, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
-      propertyPath: m_FlipX
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2935155546883087368, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
-      propertyPath: m_FlipY
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3888787329743707315, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3888787329743707315, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
-      propertyPath: m_Color.g
-      value: 0.18166472
-      objectReference: {fileID: 0}
     - target: {fileID: 3911552887131560545, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -410,24 +394,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3935592201472185822, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
-      propertyPath: damageAmount
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 3935592201472185822, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
       propertyPath: knockbackIntensity
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 7298894559337886350, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7298894559337886350, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7298894559337886350, guid: d13fe2ed1edf5f44c9286d06ac9ad7b7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -1
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -489,6 +457,14 @@ PrefabInstance:
     - target: {fileID: 6681072344698168976, guid: 5a99c9a52d040f943a001d5703ea8ad6, type: 3}
       propertyPath: m_Name
       value: Circle
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945129456974408808, guid: 5a99c9a52d040f943a001d5703ea8ad6, type: 3}
+      propertyPath: lungeDistance
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7945129456974408808, guid: 5a99c9a52d040f943a001d5703ea8ad6, type: 3}
+      propertyPath: lungeDecisionDistance
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
