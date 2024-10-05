@@ -11,7 +11,7 @@ public class BaseEnemy : MonoBehaviour {
 
     public float health = 100;
 
-    protected float timeSinceDamage = 0.0f;
+    protected float timeSinceDamage = 10.0f;
 
     public float flashTime = 1.0f;
 
@@ -39,6 +39,22 @@ public class BaseEnemy : MonoBehaviour {
 
     protected void moveToPlayer() {
         Vector2 moveDirection = getPlayerOffset().normalized;
+
+        if (!isCollidingWithPlayer) {
+            Vector2 maxSpeed = moveDirection * moveSpeed;
+
+            rigidbody.velocity += maxSpeed * Time.deltaTime/0.1f;
+
+            if (Mathf.Abs(Vector2.Dot(rigidbody.velocity.normalized, maxSpeed.normalized) - 1) < 0.2f) {
+                if (rigidbody.velocity.magnitude >= maxSpeed.magnitude) {
+                    rigidbody.velocity = maxSpeed;
+                }
+            }
+        }
+    }
+    
+    protected void moveFromPlayer() {
+        Vector2 moveDirection = -getPlayerOffset().normalized;
 
         if (!isCollidingWithPlayer) {
             Vector2 maxSpeed = moveDirection * moveSpeed;

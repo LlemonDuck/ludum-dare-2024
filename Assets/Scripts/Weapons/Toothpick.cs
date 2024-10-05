@@ -15,7 +15,7 @@ public class Toothpick : BaseWeapon {
 
     public override void OnAttack() {
         if (!isOnCooldown()) {
-            stabDirection = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - PlayerController.instance.transform.position).normalized;
+            stabDirection = ((Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)PlayerController.instance.transform.position).normalized;
             lastAttackTime = Time.time;
         }
     }
@@ -33,7 +33,7 @@ public class Toothpick : BaseWeapon {
         if (isAttacking()) {
             transform.localPosition = Vector2.Lerp(Vector2.zero, stabDirection.normalized * moveDistance, (Time.time - lastAttackTime)/attackDuration);
         } else if (isOnCooldown()) {
-            transform.localPosition = Vector2.Lerp(stabDirection.normalized * moveDistance, Vector2.zero, (Time.time - attackDuration - lastAttackTime)/attackCooldown);
+            transform.localPosition = Vector2.Lerp(stabDirection.normalized * moveDistance, Vector2.zero, (Time.time - lastAttackTime - attackDuration)/(attackCooldown - attackDuration));
         } else if (wasOnCooldownLastFrame()) {
             transform.localPosition = Vector2.zero;
             damagedEnemies.Clear();

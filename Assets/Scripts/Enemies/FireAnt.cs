@@ -27,6 +27,12 @@ public class FireAnt : BaseEnemy {
 
     public float lungeTimer = 0.0f;
 
+    public float gcdTime = 0.3f;
+    public float gcdTimer = 0.0f;
+
+    public float moveAwayMinTime = 0.8f;
+    private float moveAwayTimer =0.0f;
+
     private Vector2 lungeDirection = Vector2.zero;
     private Vector2 lungeStartPosition = Vector2.zero;
 
@@ -38,19 +44,33 @@ public class FireAnt : BaseEnemy {
 
     public enum BehaviourState {
         MOVING_TO_PLAYER,
+        MOVING_FROM_PLAYER,
         LUNGING_PLAYER,
         FIREBALL_PLAYER,
         PATROL,
+        STAND_STILL,
     }
 
     void Awake() {
         fireObjects = new GameObject[maxFireCount];
-        for(int i = 0; i < maxFireCount; i++) {
-            fireObjects[i] = Instantiate(firePrefab);
+        StartCoroutine("spawnFireBalls");
+    }
+
+    IEnumerator spawnFireBalls() {
+        AsyncInstantiateOperation<GameObject> fireballs = InstantiateAsync(firePrefab, maxFireCount);
+
+        while (!fireballs.isDone) {
+            yield return new WaitForEndOfFrame();
+        }
+
+        for (int i = 0; i < maxFireCount; i++) {
+            fireObjects[i] = fireballs.Result[i];
         }
     }
 
     void switchState(BehaviourState newState) {
+        Debug.Log(newState);
+
         switch (newState) {
             case BehaviourState.FIREBALL_PLAYER:
                 if (timeSinceFire <= fireCooldown) {
@@ -62,11 +82,17 @@ public class FireAnt : BaseEnemy {
                 goto default;
             case BehaviourState.LUNGING_PLAYER:
                 if (lungeTimer <= lungeCooldown) {
-                    switchState(BehaviourState.MOVING_TO_PLAYER);
+                    switchState(BehaviourState.MOVING_FROM_PLAYER);
                     return;
                 }
                 rigidbody.velocity = Vector2.zero;
                 lungeTimer = 0.0f;
+                goto default;
+            case BehaviourState.STAND_STILL:
+                gcdTimer = 0.0f;
+                goto default;
+            case BehaviourState.MOVING_FROM_PLAYER:
+                moveAwayTimer = 0.0f;
                 goto default;
             default:
                 currentState = newState;
@@ -92,6 +118,23 @@ public class FireAnt : BaseEnemy {
         }
     }
 
+    void moveFromPlayerState(Vector2 playerDirection) {
+        moveFromPlayer();
+
+        if (timeSinceDamage < 0.1f) {
+            switchState(BehaviourState.MOVING_TO_PLAYER);
+        }
+
+        float distance = playerDirection.magnitude;
+        if (moveAwayTimer >= moveAwayMinTime) {
+            if (distance > fireMinDistance + 0.2f && timeSinceFire >= fireCooldown) {
+                switchState(BehaviourState.FIREBALL_PLAYER);
+            } else if (distance < lungeDecisionDistance && lungeTimer >= lungeCooldown) {
+                switchState(BehaviourState.LUNGING_PLAYER);
+            }
+        }
+    }
+
     void patrolState(Vector2 playerDirection) {
         if (playerDirection.magnitude < aggroDistance) {
             switchState(BehaviourState.MOVING_TO_PLAYER);
@@ -102,10 +145,13 @@ public class FireAnt : BaseEnemy {
 
     void fireballState(Vector2 playerDirection) {
         if (timeSinceFire == 0.0f) {
-            fireObjects[fireCount % maxFireCount].TryGetComponent(out Fireball fireball);
-            if (!fireball.active) {
-                fireball.Activate(transform.position, playerDirection.normalized, fireSpeed);
-                fireCount ++;
+            GameObject fireObj = fireObjects[fireCount % maxFireCount];
+            if (fireObj != null) {
+                fireObj.TryGetComponent(out Fireball fireball);
+                if (!fireball.active) {
+                    fireball.Activate(transform.position, playerDirection.normalized, fireSpeed);
+                    fireCount ++;
+                }
             }
         }
         switchState(BehaviourState.MOVING_TO_PLAYER);
@@ -116,8 +162,8 @@ public class FireAnt : BaseEnemy {
         if (lungeTimer == 0.0f) {
             lungeDirection = playerDirection.normalized;
             lungeStartPosition = transform.position;
-        } else if (lungeTimer >= lungeChargeTime + lungeCooldown + lungeDuration) {
-            switchState(BehaviourState.MOVING_TO_PLAYER);
+        } else if (lungeTimer >= lungeDuration) {
+            switchState(BehaviourState.STAND_STILL);
         }
 
         float lungeCurveResult = lungeCurve.Evaluate(lungeTimer);
@@ -146,8 +192,16 @@ public class FireAnt : BaseEnemy {
             case BehaviourState.LUNGING_PLAYER:
                 attackState(playerDirection);
                 break;
+            case BehaviourState.MOVING_FROM_PLAYER:
+                moveFromPlayerState(playerDirection);
+                break;
             case BehaviourState.FIREBALL_PLAYER:
                 fireballState(playerDirection);
+                break;
+            case BehaviourState.STAND_STILL:
+                if(gcdTimer >= gcdTime) {
+                    switchState(BehaviourState.MOVING_TO_PLAYER);
+                }
                 break;
             case BehaviourState.PATROL:
                 patrolState(playerDirection);
@@ -172,5 +226,14 @@ public class FireAnt : BaseEnemy {
 
         lungeTimer += Time.deltaTime;
         timeSinceFire += Time.deltaTime;
+        gcdTimer += Time.deltaTime;
+        moveAwayTimer += Time.deltaTime;
+    }
+
+
+    void OnDestroy() {
+        foreach (GameObject fireball in fireObjects) {
+            Destroy(fireball);
+        }
     }
 }
