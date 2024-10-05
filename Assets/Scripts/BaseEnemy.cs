@@ -20,7 +20,15 @@ public class BaseEnemy : MonoBehaviour {
         Vector2 moveDirection = (PlayerController.instance.transform.position - transform.position).normalized;
 
         if (!isCollidingWithPlayer) {
-            rigidbody.velocity = moveDirection * moveSpeed;
+            Vector2 maxSpeed = moveDirection * moveSpeed;
+
+            rigidbody.velocity += maxSpeed * Time.deltaTime/0.1f;
+
+            if (Mathf.Abs(Vector2.Dot(rigidbody.velocity.normalized, maxSpeed.normalized) - 1) < 0.2f) {
+                if (rigidbody.velocity.magnitude >= maxSpeed.magnitude) {
+                    rigidbody.velocity = maxSpeed;
+                }
+            }
         }
     }
 
@@ -38,5 +46,11 @@ public class BaseEnemy : MonoBehaviour {
         if (health <= 0) {
             GameObject.Destroy(gameObject);
         }
+    }
+
+    public void applyDamage(float damage, Vector2 direction, float intensity) {
+        applyDamage(damage);
+
+        rigidbody.AddForce(direction * intensity, ForceMode2D.Impulse);
     }
 }

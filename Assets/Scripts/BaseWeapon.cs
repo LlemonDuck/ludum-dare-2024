@@ -32,15 +32,27 @@ public class BaseWeapon : MonoBehaviour {
 
     }
 
-    public virtual void OnCollideWithEnemy(BaseEnemy enemy) {
+    public virtual void onCollideWithEnemy(BaseEnemy enemy) {
 
     }
 
-    void OnTriggerEnter2D(Collider2D collider) {
+    public virtual void Update() {
+    }
+
+    void tryCollideEnemy(Collider2D collider) {
         collider.gameObject.TryGetComponent(out BaseEnemy enemy);
+
         if (enemy != null) {
-            OnCollideWithEnemy(enemy);
+            onCollideWithEnemy(enemy);
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider) {
+        tryCollideEnemy(collider);
+    }
+
+    void OnTriggerStay2D(Collider2D collider) {
+        tryCollideEnemy(collider);
     }
 
     public void attachToPlayer() {
