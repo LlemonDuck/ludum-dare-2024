@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour {
 
     float collisionDamage = 5.0f;
 
-    [HideInInspector]
-    BaseWeapon equippedWeapon;
+    public BaseWeapon equippedWeapon;
 
     [HideInInspector]
     int numCollidingEnemies = 0;
@@ -33,7 +32,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     private bool isInIFrame() {
-        return Time.time - lastCollisionTime >= damageTickTimeSeconds;
+        return Time.time - lastCollisionTime <= damageTickTimeSeconds;
     }
 
     // Update is called once per frame
@@ -54,10 +53,10 @@ public class PlayerController : MonoBehaviour {
             if (!isInIFrame()) {
                 health -= collisionDamage;
                 lastCollisionTime = Time.time;
+                Debug.Log(health);
             }
         }
 
-        Debug.Log(health);
     }
 
     void OnCollisionEnter2D(Collision2D collision) {

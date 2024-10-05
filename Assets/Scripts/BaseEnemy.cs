@@ -9,6 +9,8 @@ public class BaseEnemy : MonoBehaviour {
 
     private bool isCollidingWithPlayer = false;
 
+    public float health = 100;
+
     // Start is called before the first frame update
     void Start() {
     }
@@ -31,6 +33,6 @@ public class BaseEnemy : MonoBehaviour {
     }
 
     public void applyDamage(float damage) {
-        
+        health -= damage;
     }
 }

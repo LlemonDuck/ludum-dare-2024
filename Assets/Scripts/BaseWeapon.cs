@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class BaseWeapon : MonoBehaviour {
     [HideInInspector]
-    protected float lastAttackTime = 0.0f;
+    protected float lastAttackTime = -100000.0f;
 
-    protected float attackDuration = 1.0f;
+    protected float attackDuration = 0.2f;
 
-    protected float attackCooldown = 2.0f;
+    protected float attackCooldown = 0.6f;
 
     protected float damageAmount = 10.0f;
 
     protected bool isOnCooldown() {
-        return Time.time - lastAttackTime >= attackCooldown;
+        return Time.time - lastAttackTime <= attackCooldown;
+    }
+
+    protected bool wasOnCooldownLastFrame() {
+        return Time.time - Time.deltaTime - lastAttackTime <= attackCooldown;
     }
 
     protected bool isAttacking() {
