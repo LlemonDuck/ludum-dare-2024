@@ -39,5 +39,5 @@ jobs:
       - run: |
           echo "${{ secrets.SSH_DEPLOY_KEY }}" > deploy.pem
           tar czvf build.tar.gz ./build
-          scp -i deploy.pem -r ./build.tar.gz ec2-user@llemonduck.dev:
-          ssh -i deploy.pem ec2-user@llemonduck.dev rm -rf ./deploy.sh
+          scp -o StrictHostKeyChecking=no -i deploy.pem -r ./build.tar.gz ec2-user@llemonduck.dev:
+          ssh -o StrictHostKeyChecking=no -i deploy.pem ec2-user@llemonduck.dev rm -rf ./deploy.sh
