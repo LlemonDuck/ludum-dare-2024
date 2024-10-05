@@ -167,8 +167,8 @@ MonoBehaviour:
   flashTime: 1
   damageColor: {r: 0.7, g: 0.1, b: 0.1, a: 1}
   attackDistance: 0
-  lungeDecisionDistance: 7
-  lungeDistance: 10
+  lungeDecisionDistance: 4
+  lungeDistance: 7
   lungeChargeTime: 0.1
   lungeDuration: 0.3
   lungeCooldown: 0.8
@@ -176,3 +176,45 @@ MonoBehaviour:
   unaggroDistance: 200
   currentState: 2
   lungeTimer: 0
+  lungeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.101223156
+      value: -0.10250938
+      inSlope: 0.47740275
+      outSlope: 0.47740275
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.49527147
+      value: 0.60557246
+      inSlope: 1.7100099
+      outSlope: 1.7100099
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.26291484
+      outWeight: 0.23379956
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.038988233
+      outSlope: 0.038988233
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.48056263
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

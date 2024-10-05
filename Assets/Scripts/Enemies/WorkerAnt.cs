@@ -19,6 +19,9 @@ public class WorkerAnt : BaseEnemy {
     public float lungeTimer = 0.0f;
 
     private Vector2 lungeDirection = Vector2.zero;
+    private Vector2 lungeStartPosition = Vector2.zero;
+
+    public AnimationCurve lungeCurve;
 
     public enum BehaviourState {
         MOVING_TO_PLAYER,
@@ -41,8 +44,8 @@ public class WorkerAnt : BaseEnemy {
     }
 
     public override void applyDamage(float damage) {
-        base.applyDamage(damage);
         switchState(BehaviourState.MOVING_TO_PLAYER);
+        base.applyDamage(damage);
     }
 
     void moveToPlayerState(Vector2 playerDirection) {
@@ -60,18 +63,26 @@ public class WorkerAnt : BaseEnemy {
         if (playerDirection.magnitude < aggroDistance) {
             switchState(BehaviourState.MOVING_TO_PLAYER);
         } else {
-
+            // TODO: ADD AN ACTUAL PATROL STATE
         }
     }
 
     void attackState(Vector2 playerDirection) {
         if (lungeTimer == 0.0f) {
             lungeDirection = playerDirection.normalized;
+            lungeStartPosition = transform.position;
         } else if (lungeTimer >= lungeChargeTime + lungeCooldown + lungeDuration) {
             switchState(BehaviourState.MOVING_TO_PLAYER);
         }
 
         lungeTimer += Time.deltaTime;
+
+        float lungeCurveResult = lungeCurve.Evaluate(lungeTimer);
+        if (lungeCurveResult < 0) {
+            rigidbody.position = Vector2.Lerp(lungeStartPosition, lungeStartPosition - lungeDirection * lungeDistance, Mathf.Abs(lungeCurveResult));
+        } else {
+            rigidbody.position = Vector2.Lerp(lungeStartPosition, lungeStartPosition + lungeDirection * lungeDistance, lungeCurveResult);
+        }
     }
 
     // Start is called before the first frame update

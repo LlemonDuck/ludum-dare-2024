@@ -72,6 +72,7 @@ public class BaseEnemy : MonoBehaviour {
     public virtual void applyDamage(float damage, Vector2 direction, float intensity) {
         timeSinceDamage = 0.0f;
         applyDamage(damage);
+        rigidbody.velocity = Vector2.zero;
 
         rigidbody.AddForce(direction * intensity, ForceMode2D.Impulse);
     }
