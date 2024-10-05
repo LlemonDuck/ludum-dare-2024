@@ -37,5 +37,7 @@ jobs:
           path: build
 
       - run: |
-          echo ${{ secrets.SSH_DEPLOY_KEY }} > deploy.pem
-          scp -i deploy.pem -r ./build ec2-user@llemonduck.dev:
+          echo "${{ secrets.SSH_DEPLOY_KEY }}" > deploy.pem
+          tar czvf build.tar.gz ./build
+          scp -i deploy.pem -r ./build.tar.gz ec2-user@llemonduck.dev:
+          ssh -i deploy.pem ec2-user@llemonduck.dev rm -rf ./deploy.sh
