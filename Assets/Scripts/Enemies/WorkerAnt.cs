@@ -125,7 +125,5 @@ public class WorkerAnt : BaseEnemy {
         } while (stateBeforeUpdate != stateAfterUpdate);
 
         lungeTimer += Time.deltaTime;
-
-        lungeTimer += Time.deltaTime;
     }
 }
