@@ -193,11 +193,11 @@ public class FireAnt : BaseEnemy {
         if (lungeTimer == 0.0f) {
             lungeDirection = playerDirection.normalized;
             lungeStartPosition = transform.position;
-        } else if (lungeTimer >= lungeDuration) {
+        } else if (lungeTimer >= lungeDuration + lungeChargeTime) {
             switchState(BehaviourState.STAND_STILL);
         }
 
-        float lungeCurveResult = lungeCurve.Evaluate(lungeTimer);
+        float lungeCurveResult = lungeCurve.Evaluate(lungeTimer/(lungeDuration + lungeChargeTime));
         if (lungeCurveResult < 0) {
             rigidbody.position = Vector2.Lerp(lungeStartPosition, lungeStartPosition - lungeDirection * lungeDistance, Mathf.Abs(lungeCurveResult));
         } else {

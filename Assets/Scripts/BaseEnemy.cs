@@ -19,6 +19,8 @@ public class BaseEnemy : MonoBehaviour {
 
     public Color damageColor = new Color(0.7f, 0.1f, 0.1f);
 
+    public Collider2D damageCollider;
+
     // Start is called before the first frame update
     void Start() {
     }
@@ -71,11 +73,11 @@ public class BaseEnemy : MonoBehaviour {
         }
     }
 
-    void OnCollisionEnter2D(Collision2D collision) {
+    protected virtual void OnCollisionEnter2D(Collision2D collision) {
         isCollidingWithPlayer = collision.gameObject == PlayerController.instance.gameObject;
     }
 
-    void OnCollisionExit2D(Collision2D collision) {
+    protected virtual void OnCollisionExit2D(Collision2D collision) {
         if (collision.gameObject == PlayerController.instance.gameObject) {
             isCollidingWithPlayer = false;
         }
