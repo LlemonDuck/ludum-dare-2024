@@ -76,32 +76,32 @@ public class FireAnt : BaseEnemy {
     }
 
     void switchState(BehaviourState newState) {
-        Debug.Log(newState);
-
         int random = Random.Range(0, 5);
 
         switch (newState) {
             case BehaviourState.FIREBALL_PLAYER:
-                if (random == 0) {
-                    goto CircleFire;
-                }
-
                 if (timeSinceFire <= fireCooldown) {
                     switchState(BehaviourState.MOVING_TO_PLAYER);
                     return;
                 }
-                rigidbody.velocity = Vector2.zero;
-                timeSinceFire = 0.0f;
-                goto default;
-            case BehaviourState.LUNGING_PLAYER:
+
                 if (random == 0) {
                     goto CircleFire;
                 }
 
+                rigidbody.velocity = Vector2.zero;
+                timeSinceFire = 0.0f;
+                goto default;
+            case BehaviourState.LUNGING_PLAYER:
                 if (lungeTimer <= lungeCooldown) {
                     switchState(BehaviourState.MOVING_FROM_PLAYER);
                     return;
                 }
+
+                if (random == 0) {
+                    goto CircleFire;
+                }
+
                 rigidbody.velocity = Vector2.zero;
                 lungeTimer = 0.0f;
                 goto default;
@@ -295,7 +295,6 @@ public class FireAnt : BaseEnemy {
         moveAwayTimer += Time.deltaTime;
         circlingTimer += Time.deltaTime;
     }
-
 
     void OnDestroy() {
         foreach (GameObject fireball in fireObjects) {

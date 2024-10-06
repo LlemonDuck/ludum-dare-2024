@@ -13,6 +13,8 @@ public class Fireball : MonoBehaviour {
 
     public float lifeCycle = 5.0f;
 
+    public float playerDamage = 5.0f;
+
     IEnumerator deactivateCoroutine;
 
     void Deactivate() {
@@ -37,13 +39,28 @@ public class Fireball : MonoBehaviour {
         sprite.enabled = true;
         active = true;
         rigidbody.velocity = direction * speed;
+        
+        var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0, 0, angle + 90);
 
         deactivateCoroutine = DeactivateAfterSeconds(lifeCycle);
         StartCoroutine(deactivateCoroutine);
     }
 
-    // TODO: Destroy when it hits non enemy non player objects
-    // TODO: Damage player on hit.
     // TODO: Light branches on fire? 
     // TODO: come up with more ideas :) 
+
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (!active) return;
+        collision.gameObject.TryGetComponent(out PlayerController player);
+        collision.gameObject.TryGetComponent(out BaseEnemy enemy);
+
+        if (player != null) {
+            player.applyDamage(playerDamage);
+        }
+
+        if (enemy == null && player == null) {
+            Deactivate();
+        } 
+    }
 }

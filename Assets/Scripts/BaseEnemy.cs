@@ -15,6 +15,8 @@ public class BaseEnemy : MonoBehaviour {
 
     public float flashTime = 1.0f;
 
+    public float knockbackDampingFactor = 1.0f;
+
     public Color damageColor = new Color(0.7f, 0.1f, 0.1f);
 
     // Start is called before the first frame update
@@ -92,6 +94,6 @@ public class BaseEnemy : MonoBehaviour {
         applyDamage(damage);
         rigidbody.velocity = Vector2.zero;
 
-        rigidbody.AddForce(direction * intensity, ForceMode2D.Impulse);
+        rigidbody.AddForce(direction * intensity / knockbackDampingFactor, ForceMode2D.Impulse);
     }
 }
