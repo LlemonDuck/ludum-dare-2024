@@ -60,7 +60,7 @@ public static class WallTileHelper {
         return (input | orBm) == orBm && (input & andBm) == andBm;
     }
 
-    public static HashSet<int> wallSouthEightDirections = new HashSet<int> {
+    public static HashSet<int> wallSouthEightDirections = new() {
         0b01000001
     };
 }

@@ -17,19 +17,17 @@ public class DungeonGenerator: MonoBehaviour {
     [SerializeField]
     [Range(0,10)]
     private int offset = 1;
-    [SerializeField]
-    private bool shouldUseRandomWalkRooms = false;
 
     public static Vector3Int playerStartPosition = Vector3Int.zero;
+    public static Vector3Int queenStartPosition = Vector3Int.zero;
 
     protected void Awake() {
         Time.timeScale = 0.0f;
-        List<Vector2Int> roomCenterPoints = GenerateDungeon();
-        SetSpawnPoints(roomCenterPoints);
+        GenerateDungeon();
         Time.timeScale = 1.0f;
     }
 
-    public List<Vector2Int> GenerateDungeon() {
+    public void GenerateDungeon() {
         tilemapVisualizer.Clear();
         wallColliderGenerator.Clear();
 
@@ -39,30 +37,24 @@ public class DungeonGenerator: MonoBehaviour {
             minRoomHeight
         );
 
-        HashSet<Vector2Int> floor;
-        if (shouldUseRandomWalkRooms) {
-            floor = CreateRandomRooms(roomList);
-        } else {
-            floor = CreateSimpleRooms(roomList);
-        }
+        HashSet<Vector2Int> floor = CreateSimpleRooms(roomList);
+        floor.UnionWith(CreateRandomRooms(roomList));
 
-        List<Vector2Int> roomCenterPoints = new List<Vector2Int>();
+        List<Vector2Int> roomCenterPoints = new();
         foreach(var room in roomList) {
             roomCenterPoints.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
         }
-        List<Vector2Int> roomCenterPointsCopy = new List<Vector2Int>(roomCenterPoints);
+        SetSpawnPoints(roomCenterPoints, floor);
         HashSet<Vector2Int> corridors = ConnectRooms(roomCenterPoints);
         floor.UnionWith(corridors);
 
         tilemapVisualizer.PaintFloorTiles(floor);
         List<Rect> wallColliders = WallGenerator.CreateWalls(floor, tilemapVisualizer);
         wallColliderGenerator.CreateColliders(wallColliders);
-
-        return roomCenterPointsCopy;
     }
 
     private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomList) {
-        HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> floor = new();
         foreach (var room in roomList) {
             for (int col = offset; col < room.size.x - offset; col++) {
                 for (int row = offset; row < room.size.y - offset; row++) {
@@ -75,7 +67,7 @@ public class DungeonGenerator: MonoBehaviour {
     }
 
     private HashSet<Vector2Int> CreateRandomRooms(List<BoundsInt> roomList) {
-        HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> floor = new();
         for(int i = 0; i < roomList.Count; i++) {
             var roomBounds = roomList[i];
             var roomCenter = new Vector2Int(Mathf.RoundToInt(roomBounds.center.x), Mathf.RoundToInt(roomBounds.center.y));
@@ -93,7 +85,7 @@ public class DungeonGenerator: MonoBehaviour {
 
     private HashSet<Vector2Int> RunRandomWalk(SimpleRandomWalkSO parameters, Vector2Int position) {
         var currentPosition = position;
-        HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> floorPositions = new();
         for (int i = 0; i < parameters.iterations; i++) {
             var path = ProceduralGenerationAlgorithms.SimpleRandomWalk(currentPosition, parameters.walkLen);
             floorPositions.UnionWith(path);
@@ -105,7 +97,7 @@ public class DungeonGenerator: MonoBehaviour {
     }
 
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenterPoints) {
-        HashSet<Vector2Int> corridors = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> corridors = new();
         var currentRoomCenter = roomCenterPoints[Random.Range(0, roomCenterPoints.Count)];
         roomCenterPoints.Remove(currentRoomCenter);
 
@@ -133,7 +125,7 @@ public class DungeonGenerator: MonoBehaviour {
     }
 
     private HashSet<Vector2Int> CreateCorridor(Vector2Int currentRoomCenter, Vector2Int destination) {
-        HashSet<Vector2Int> corridor = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> corridor = new();
         var position = currentRoomCenter;
         corridor.Add(position);
         while (position.y != destination.y) {
@@ -159,12 +151,16 @@ public class DungeonGenerator: MonoBehaviour {
         return corridor;
     }
 
-    private void SetSpawnPoints(List<Vector2Int> roomCenterPoints) {
+    private void SetSpawnPoints(List<Vector2Int> roomCenterPoints, HashSet<Vector2Int> floorPositions) {
         // player should spawn in center of start room
         playerStartPosition = (Vector3Int)roomCenterPoints[0];
 
         // queen should spawn in last room in list
+        queenStartPosition = (Vector3Int)roomCenterPoints[^1];
 
         // drones should spawn in random floor positions
+        //for () {
+
+        //}
     }
 }
