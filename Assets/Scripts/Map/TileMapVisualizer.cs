@@ -50,13 +50,13 @@ public class TilemapVisualizer : MonoBehaviour {
         TileBase tile = null;
         if (WallTileHelper.IsCornerNorthEastOpen(typeAsInt)) {
             tile = wallCornerNorthEastOpen;
-        } else if (WallTileHelper.wallCornerNorthWestOpen.Contains(typeAsInt)) {
+        } else if (WallTileHelper.IsCornerNorthWestOpen(typeAsInt)) {
             tile = wallCornerNorthWestOpen;
         } else if (WallTileHelper.wallCornerSouthEastOpen.Contains(typeAsInt)) {
             tile = wallCornerSouthEastOpen;
-        } else if (WallTileHelper.wallCornerSouthWestOpen.Contains(typeAsInt)) {
+        } else if (WallTileHelper.IsCornerSouthWestOpen(typeAsInt)) {
             tile = wallCornerSouthWestOpen;
-        } else if (WallTileHelper.wallCornerSouthWest.Contains(typeAsInt)) {
+        } else if (WallTileHelper.IsCornerSouthWest(typeAsInt)) {
             tile = wallCornerSouthWest;
         } else if (WallTileHelper.wallCornerSouthEast.Contains(typeAsInt)) {
             tile = wallCornerSouthEast;
