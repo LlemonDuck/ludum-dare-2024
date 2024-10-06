@@ -30,13 +30,13 @@ public class TilemapVisualizer : MonoBehaviour {
         TileBase tile = null;
         if (typeAsInt == 0b0111 || typeAsInt == 0b1011 || typeAsInt == 0b1101 || typeAsInt >= 0b1110) {
             tile = wallRock;
-        } else if (WallTileHelper.iswallNorth(typeAsInt)) {
+        } else if (WallTileHelper.IswallNorth(typeAsInt)) {
             tile = wallNorth;
-        } else if (WallTileHelper.isWallEast(typeAsInt)) {
+        } else if (WallTileHelper.IsWallEast(typeAsInt)) {
             tile = wallEast;
-        } else if (WallTileHelper.isWallWest(typeAsInt)) {
+        } else if (WallTileHelper.IsWallWest(typeAsInt)) {
             tile = wallWest;
-        } else if (WallTileHelper.iswallSouth(typeAsInt)) {
+        } else if (WallTileHelper.IswallSouth(typeAsInt)) {
             tile = wallSouth;
         }
 
@@ -64,7 +64,7 @@ public class TilemapVisualizer : MonoBehaviour {
             tile = wallCornerNorthEast;
         } else if (WallTileHelper.IsCornerNorthWest(typeAsInt)) {
             tile = wallCornerNorthWest;
-        } else if (WallTileHelper.IsWallAll(typeAsInt) || WallTileHelper.wallFullEightDirections.Contains(typeAsInt)) {
+        } else if (WallTileHelper.IsWallAll(typeAsInt)) {
             tile = wallFull;
         } else if (WallTileHelper.wallSouthEightDirections.Contains(typeAsInt)) {
             tile = wallSouth;
