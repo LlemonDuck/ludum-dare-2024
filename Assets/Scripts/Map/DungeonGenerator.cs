@@ -11,6 +11,8 @@ public class DungeonGenerator: MonoBehaviour {
     [SerializeField]
     private WallColliderGenerator wallColliderGenerator = null;
     [SerializeField]
+    private GameObject workerPrefab = null;
+    [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
     [SerializeField]
     private int minRoomWidth = 4, minRoomHeight = 4;
@@ -165,10 +167,7 @@ public class DungeonGenerator: MonoBehaviour {
         List<Vector2Int> floorPositionsList = new(floorPositions);
         int numWorkers = (int)Math.Sqrt(dungeonHeight * dungeonWidth) / 2;
         for (int i = 0; i < numWorkers; i++) {
-            GameObject workerObject = new("Worker Ant " + i);
-            WorkerAnt worker = workerObject.AddComponent<WorkerAnt>();
-            worker.rigidbody = workerObject.AddComponent<Rigidbody2D>();
-            worker.damageCollider = workerObject.AddComponent<BoxCollider2D>();
+            GameObject worker = Instantiate(workerPrefab);
             Vector2Int workerPosition = floorPositionsList[Random.Range(0, floorPositions.Count)];
             worker.transform.position = new(workerPosition.x, workerPosition.y); 
         }
