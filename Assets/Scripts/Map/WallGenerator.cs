@@ -10,63 +10,7 @@ public static class WallGenerator {
         var cornerWallPositions = FindWallsInDirections(floorPositions, Direction2D.diagonalDirections);
         CreateBasicWalls(tilemapVisualizer, basicWallPositions, floorPositions);
         CreateCornerWalls(tilemapVisualizer, cornerWallPositions, floorPositions);
-
-        List<Rect> wallColliders = new List<Rect>(basicWallPositions.Count / 5);
-
-        foreach (var wall in basicWallPositions) {
-            if (wallColliders.FindIndex(collider => {
-                if ((int)collider.x == wall.x) {
-                    var resultY = (int)Mathf.Clamp(wall.y, collider.y, collider.y + collider.height);
-                    if (resultY == wall.y) {
-                        return true;
-                    }
-                } else if ((int)collider.y == wall.y) {
-                    var resultX = (int)Mathf.Clamp(wall.x, collider.x, collider.x + collider.width);
-                    if (resultX == wall.x) {
-                        return true;
-                    }
-                }
-                return false;
-            }) != -1) {
-                continue;
-            }
-
-            Vector2Int searchDirection = Vector2Int.zero;
-
-            foreach (var direction in Direction2D.cardinalDirections) {
-                bool hasValue = basicWallPositions.TryGetValue(wall + direction, out Vector2Int adjacentWall);
-                if (hasValue) {
-                    searchDirection = direction;
-                    break;
-                }
-            }
-
-            Vector2Int minWall = wall;
-            Vector2Int maxWall = wall;
-
-            bool hasNewMin = true;
-            bool hasNewMax = true;
-            do {
-                hasNewMin = basicWallPositions.TryGetValue(minWall - searchDirection, out Vector2Int newMinWall);
-                hasNewMax = basicWallPositions.TryGetValue(maxWall + searchDirection, out Vector2Int newMaxWall);
-
-                if (hasNewMin) {
-                    minWall = newMinWall;
-                }
-
-                if (hasNewMax) {
-                    maxWall = newMaxWall;
-                }
-            } while(searchDirection != Vector2Int.zero && (hasNewMin || hasNewMax));
-
-            float x = Mathf.Min(minWall.x, maxWall.x);
-            float y = Mathf.Min(minWall.y, maxWall.y);
-            float w = Mathf.Abs(minWall.x - maxWall.x);
-            float h = Mathf.Abs(minWall.y - maxWall.y);
-            wallColliders.Add(new Rect(x, y, w, h));
-        }
-
-        return wallColliders;
+        return GetRectsFromPositions(basicWallPositions);
     }
 
     private static void CreateBasicWalls(TilemapVisualizer tilemapVisualizer, HashSet<Vector2Int> basicWallPositions, HashSet<Vector2Int> floorPositions) {
@@ -89,6 +33,65 @@ public static class WallGenerator {
             }
             tilemapVisualizer.PaintSingleCornerWall(position, neighboursBinaryStr);
         }
+    }
+
+    private static List<Rect> GetRectsFromPositions(HashSet<Vector2Int> positions) {
+        List<Rect> positionRects = new List<Rect>(positions.Count / 5);
+
+        foreach (var position in positions) {
+            if (positionRects.FindIndex(collider => {
+                if ((int)collider.x == position.x) {
+                    var resultY = (int)Mathf.Clamp(position.y, collider.y, collider.y + collider.height);
+                    if (resultY == position.y) {
+                        return true;
+                    }
+                } else if ((int)collider.y == position.y) {
+                    var resultX = (int)Mathf.Clamp(position.x, collider.x, collider.x + collider.width);
+                    if (resultX == position.x) {
+                        return true;
+                    }
+                }
+                return false;
+            }) != -1) {
+                continue;
+            }
+
+            Vector2Int searchDirection = Vector2Int.zero;
+
+            foreach (var direction in Direction2D.cardinalDirections) {
+                bool hasValue = positions.TryGetValue(position + direction, out Vector2Int adjacentWall);
+                if (hasValue) {
+                    searchDirection = direction;
+                    break;
+                }
+            }
+
+            Vector2Int minWall = position;
+            Vector2Int maxWall = position;
+
+            bool hasNewMin = true;
+            bool hasNewMax = true;
+            do {
+                hasNewMin = positions.TryGetValue(minWall - searchDirection, out Vector2Int newMinWall);
+                hasNewMax = positions.TryGetValue(maxWall + searchDirection, out Vector2Int newMaxWall);
+
+                if (hasNewMin) {
+                    minWall = newMinWall;
+                }
+
+                if (hasNewMax) {
+                    maxWall = newMaxWall;
+                }
+            } while(searchDirection != Vector2Int.zero && (hasNewMin || hasNewMax));
+
+            float x = Mathf.Min(minWall.x, maxWall.x);
+            float y = Mathf.Min(minWall.y, maxWall.y);
+            float w = Mathf.Abs(minWall.x - maxWall.x);
+            float h = Mathf.Abs(minWall.y - maxWall.y);
+            positionRects.Add(new Rect(x, y, w, h));
+        }
+
+        return positionRects;
     }
 
     private static HashSet<Vector2Int> FindWallsInDirections(HashSet<Vector2Int> floorPositions, List<Vector2Int> directions) {
