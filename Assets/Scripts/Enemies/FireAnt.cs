@@ -30,8 +30,14 @@ public class FireAnt : BaseEnemy {
     public float gcdTime = 0.3f;
     public float gcdTimer = 0.0f;
 
+
+    private float circlingTimer = 1000.0f;
+    public float circlingCooldown = 20.0f;
+    public float circlingTime = 7.0f;
+    public float desiredCircleDistance = 8.0f;
+
     public float moveAwayMinTime = 0.8f;
-    private float moveAwayTimer =0.0f;
+    private float moveAwayTimer = 0.0f;
 
     private Vector2 lungeDirection = Vector2.zero;
     private Vector2 lungeStartPosition = Vector2.zero;
@@ -47,6 +53,7 @@ public class FireAnt : BaseEnemy {
         MOVING_FROM_PLAYER,
         LUNGING_PLAYER,
         FIREBALL_PLAYER,
+        CIRCLE_AND_FIRE,
         PATROL,
         STAND_STILL,
     }
@@ -71,8 +78,14 @@ public class FireAnt : BaseEnemy {
     void switchState(BehaviourState newState) {
         Debug.Log(newState);
 
+        int random = Random.Range(0, 5);
+
         switch (newState) {
             case BehaviourState.FIREBALL_PLAYER:
+                if (random == 0) {
+                    goto CircleFire;
+                }
+
                 if (timeSinceFire <= fireCooldown) {
                     switchState(BehaviourState.MOVING_TO_PLAYER);
                     return;
@@ -81,6 +94,10 @@ public class FireAnt : BaseEnemy {
                 timeSinceFire = 0.0f;
                 goto default;
             case BehaviourState.LUNGING_PLAYER:
+                if (random == 0) {
+                    goto CircleFire;
+                }
+
                 if (lungeTimer <= lungeCooldown) {
                     switchState(BehaviourState.MOVING_FROM_PLAYER);
                     return;
@@ -94,6 +111,16 @@ public class FireAnt : BaseEnemy {
             case BehaviourState.MOVING_FROM_PLAYER:
                 moveAwayTimer = 0.0f;
                 goto default;
+            case BehaviourState.CIRCLE_AND_FIRE: 
+            CircleFire:
+                Debug.Log(BehaviourState.CIRCLE_AND_FIRE);
+                if (circlingTimer <= circlingCooldown) {
+                    switchState(BehaviourState.MOVING_TO_PLAYER);
+                    return;
+                }
+                currentState = BehaviourState.CIRCLE_AND_FIRE;
+                circlingTimer = 0.0f;
+                break;
             default:
                 currentState = newState;
                 break;
@@ -145,17 +172,21 @@ public class FireAnt : BaseEnemy {
 
     void fireballState(Vector2 playerDirection) {
         if (timeSinceFire == 0.0f) {
-            GameObject fireObj = fireObjects[fireCount % maxFireCount];
-            if (fireObj != null) {
-                fireObj.TryGetComponent(out Fireball fireball);
-                if (!fireball.active) {
-                    fireball.Activate(transform.position, playerDirection.normalized, fireSpeed);
-                    fireCount ++;
-                }
-            }
+            shootFireball(playerDirection);
         }
         switchState(BehaviourState.MOVING_TO_PLAYER);
         return;
+    }
+
+    void shootFireball(Vector2 playerDirection) {
+        GameObject fireObj = fireObjects[fireCount % maxFireCount];
+        if (fireObj != null) {
+            fireObj.TryGetComponent(out Fireball fireball);
+            if (!fireball.active) {
+                fireball.Activate(transform.position, playerDirection.normalized, fireSpeed);
+                fireCount ++;
+            }
+        }
     }
 
     void attackState(Vector2 playerDirection) {
@@ -178,12 +209,43 @@ public class FireAnt : BaseEnemy {
         }
     }
 
+    void circleState(Vector2 playerDirection) {
+        Vector2 clockwiseDirection = new Vector2(playerDirection.y, -playerDirection.x);
+
+        Vector2 movementDirection = (playerDirection * (playerDirection.magnitude - desiredCircleDistance)) + clockwiseDirection;
+
+        if (timeSinceDamage <= 0.1f) {
+            switchState(BehaviourState.MOVING_TO_PLAYER);
+        }
+
+        movementDirection = movementDirection.normalized * moveSpeed * 1.5f;
+
+        rigidbody.velocity = movementDirection;
+
+        if (circlingTimer >= circlingTime) {
+            switchState(BehaviourState.MOVING_TO_PLAYER);
+        }
+
+        if (timeSinceFire >= fireCooldown/2) {
+            timeSinceFire = 0.0f;
+            shootFireball(playerDirection);
+        }
+    }
+
     // Start is called before the first frame update
     void Start() {
     }
 
     void applyState() {
         Vector2 playerDirection = getPlayerOffset();
+        
+        if (currentState == BehaviourState.LUNGING_PLAYER || currentState == BehaviourState.STAND_STILL) {
+            var angle = Mathf.Atan2(lungeDirection.y, lungeDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+        } else {
+            var angle = Mathf.Atan2(playerDirection.y, playerDirection.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+        }
 
         switch (currentState) {
             case BehaviourState.MOVING_TO_PLAYER:
@@ -203,6 +265,9 @@ public class FireAnt : BaseEnemy {
                     switchState(BehaviourState.MOVING_TO_PLAYER);
                 }
                 break;
+            case BehaviourState.CIRCLE_AND_FIRE:
+                circleState(playerDirection);
+                break;
             case BehaviourState.PATROL:
                 patrolState(playerDirection);
                 break;
@@ -213,8 +278,8 @@ public class FireAnt : BaseEnemy {
     protected override void Update() {
         base.Update();
     
-        BehaviourState stateBeforeUpdate = currentState;
-        BehaviourState stateAfterUpdate = currentState;
+        BehaviourState stateBeforeUpdate;
+        BehaviourState stateAfterUpdate;
 
         do {
             stateBeforeUpdate = currentState;
@@ -228,6 +293,7 @@ public class FireAnt : BaseEnemy {
         timeSinceFire += Time.deltaTime;
         gcdTimer += Time.deltaTime;
         moveAwayTimer += Time.deltaTime;
+        circlingTimer += Time.deltaTime;
     }
 
 

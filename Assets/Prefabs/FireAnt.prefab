@@ -113,7 +113,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!58 &6085206335700041177
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -184,6 +184,9 @@ MonoBehaviour:
   lungeTimer: 0
   gcdTime: 0.3
   gcdTimer: 0
+  circlingCooldown: 10
+  circlingTime: 7
+  desiredCircleDistance: 8
   moveAwayMinTime: 0.8
   firePrefab: {fileID: 2785855343683819114, guid: 0b7df861d17f24f4b8eb6e4e0d61bc26, type: 3}
   lungeCurve:
