@@ -25,9 +25,9 @@ public static class WallGenerator {
     private static void CreateCornerWalls(TilemapVisualizer tilemapVisualizer, HashSet<Vector2Int> cornerWallPositions, HashSet<Vector2Int> floorPositions) {
         foreach (var position in cornerWallPositions) {
             string neighboursBinaryStr = "";
-            foreach(var direction in Direction2D.cardinalDirections) {
+            foreach (var direction in Direction2D.eightDirections) {
                 var neighbourPosition = position + direction;
-                neighboursBinaryStr += floorPositions.Contains(neighbourPosition) ? "1" : "0"; 
+                neighboursBinaryStr += floorPositions.Contains(neighbourPosition) ? "1" : "0";
             }
             tilemapVisualizer.PaintSingleCornerWall(position, neighboursBinaryStr);
         }

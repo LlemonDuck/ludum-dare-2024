@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class TileHelper {
+public static class WallTileHelper {
     public static HashSet<int> wallTop = new HashSet<int> {
         0b1111,
         0b0110,
