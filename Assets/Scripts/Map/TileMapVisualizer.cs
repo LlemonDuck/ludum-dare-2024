@@ -28,7 +28,7 @@ public class TilemapVisualizer : MonoBehaviour {
     internal void PaintSingleBasicWall(Vector2Int position, string binaryType) {
         int typeAsInt = Convert.ToInt32(binaryType, 2);
         TileBase tile = null;
-        if (typeAsInt == 0b1111) {
+        if (typeAsInt == 0b0111 || typeAsInt == 0b1011 || typeAsInt == 0b1101 || typeAsInt == 0b1110) {
             tile = wallFull;
         } else if (WallTileHelper.iswallNorth(typeAsInt)) {
             tile = wallNorth;
