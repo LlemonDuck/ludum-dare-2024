@@ -11,7 +11,7 @@ public class TilemapVisualizer : MonoBehaviour {
     [SerializeField]
     private TileBase defaultFloorTile, wallNorth, wallEast, wallWest, wallSouth, wallFull, wallCornerNorthEastOpen,
             wallCornerNorthWestOpen, wallCornerSouthEastOpen, wallCornerSouthWestOpen,
-            wallCornerSouthEast, wallCornerSouthWest, wallCornerNorthEast, wallCornerNorthWest;
+            wallCornerSouthEast, wallCornerSouthWest, wallCornerNorthEast, wallCornerNorthWest, wallRock;
     [SerializeField]
     private List<TileBase> variantFloorTiles;
 
@@ -28,8 +28,8 @@ public class TilemapVisualizer : MonoBehaviour {
     internal void PaintSingleBasicWall(Vector2Int position, string binaryType) {
         int typeAsInt = Convert.ToInt32(binaryType, 2);
         TileBase tile = null;
-        if (typeAsInt == 0b0111 || typeAsInt == 0b1011 || typeAsInt == 0b1101 || typeAsInt == 0b1110) {
-            tile = wallFull;
+        if (typeAsInt == 0b0111 || typeAsInt == 0b1011 || typeAsInt == 0b1101 || typeAsInt >= 0b1110) {
+            tile = wallRock;
         } else if (WallTileHelper.iswallNorth(typeAsInt)) {
             tile = wallNorth;
         } else if (WallTileHelper.isWallEast(typeAsInt)) {
