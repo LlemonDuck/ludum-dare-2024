@@ -64,7 +64,7 @@ public class TilemapVisualizer : MonoBehaviour {
             tile = wallCornerNorthEast;
         } else if (WallTileHelper.IsCornerNorthWest(typeAsInt)) {
             tile = wallCornerNorthWest;
-        } else if (WallTileHelper.wallFullEightDirections.Contains(typeAsInt)) {
+        } else if (WallTileHelper.IsWallAll(typeAsInt) || WallTileHelper.wallFullEightDirections.Contains(typeAsInt)) {
             tile = wallFull;
         } else if (WallTileHelper.wallSouthEightDirections.Contains(typeAsInt)) {
             tile = wallSouth;
