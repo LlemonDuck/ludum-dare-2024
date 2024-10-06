@@ -9,8 +9,9 @@ public class TilemapVisualizer : MonoBehaviour {
     [SerializeField]
     public Tilemap floorTilemap, wallTileMap;
     [SerializeField]
-    private TileBase defaultFloorTile, wallTop, wallSideRight, wallSideLeft, wallBottom, wallFull,  wallInnerCornerDownLeft, wallInnerCornerDownRight,
-            wallDiagonalCornerDownRight, wallDiagonalCornerDownLeft, wallDiagonalCornerUpRight, wallDiagonalCornerUpLeft;
+    private TileBase defaultFloorTile, wallNorth, wallEast, wallWest, wallSouth, wallFull, wallCornerNorthEastOpen,
+            wallCornerNorthWestOpen, wallCornerSouthEastOpen, wallCornerSouthWestOpen,
+            wallCornerSouthEast, wallCornerSouthWest, wallCornerNorthEast, wallCornerNorthWest, wallRock;
     [SerializeField]
     private List<TileBase> variantFloorTiles;
 
@@ -27,16 +28,16 @@ public class TilemapVisualizer : MonoBehaviour {
     internal void PaintSingleBasicWall(Vector2Int position, string binaryType) {
         int typeAsInt = Convert.ToInt32(binaryType, 2);
         TileBase tile = null;
-        if (WallTileHelper.wallTop.Contains(typeAsInt)) {
-            tile = wallTop;
-        } else if (WallTileHelper.wallSideRight.Contains(typeAsInt)) {
-            tile = wallSideRight;
-        } else if (WallTileHelper.wallSideLeft.Contains(typeAsInt)) {
-            tile = wallSideLeft;
-        } else if (WallTileHelper.wallBottom.Contains(typeAsInt)) {
-            tile = wallBottom;
-        } else if (WallTileHelper.wallFull.Contains(typeAsInt)) {
-            tile = wallFull;
+        if (typeAsInt == 0b0111 || typeAsInt == 0b1011 || typeAsInt == 0b1101 || typeAsInt >= 0b1110) {
+            tile = wallRock;
+        } else if (WallTileHelper.iswallNorth(typeAsInt)) {
+            tile = wallNorth;
+        } else if (WallTileHelper.isWallEast(typeAsInt)) {
+            tile = wallEast;
+        } else if (WallTileHelper.isWallWest(typeAsInt)) {
+            tile = wallWest;
+        } else if (WallTileHelper.iswallSouth(typeAsInt)) {
+            tile = wallSouth;
         }
 
         if (tile != null) { 
@@ -47,29 +48,26 @@ public class TilemapVisualizer : MonoBehaviour {
     internal void PaintSingleCornerWall(Vector2Int position, string binaryType) {
         int typeAsInt = Convert.ToInt32(binaryType, 2);
         TileBase tile = null;
-        if (WallTileHelper.wallInnerCornerDownLeft.Contains(typeAsInt)) {
-            tile = wallInnerCornerDownLeft;
-        }
-        else if (WallTileHelper.wallInnerCornerDownRight.Contains(typeAsInt)) {
-            tile = wallInnerCornerDownRight;
-        }
-        else if (WallTileHelper.wallDiagonalCornerDownLeft.Contains(typeAsInt)) {
-            tile = wallDiagonalCornerDownLeft;
-        }
-        else if (WallTileHelper.wallDiagonalCornerDownRight.Contains(typeAsInt)) {
-            tile = wallDiagonalCornerDownRight;
-        }
-        else if (WallTileHelper.wallDiagonalCornerUpRight.Contains(typeAsInt)) {
-            tile = wallDiagonalCornerUpRight;
-        }
-        else if (WallTileHelper.wallDiagonalCornerUpLeft.Contains(typeAsInt)) {
-            tile = wallDiagonalCornerUpLeft;
-        }
-        else if (WallTileHelper.wallFullEightDirections.Contains(typeAsInt)) {
+        if (WallTileHelper.IsCornerNorthEastOpen(typeAsInt)) {
+            tile = wallCornerNorthEastOpen;
+        } else if (WallTileHelper.IsCornerNorthWestOpen(typeAsInt)) {
+            tile = wallCornerNorthWestOpen;
+        } else if (WallTileHelper.IsCornerSouthEastOpen(typeAsInt)) {
+            tile = wallCornerSouthEastOpen;
+        } else if (WallTileHelper.IsCornerSouthWestOpen(typeAsInt)) {
+            tile = wallCornerSouthWestOpen;
+        } else if (WallTileHelper.IsCornerSouthWest(typeAsInt)) {
+            tile = wallCornerSouthWest;
+        } else if (WallTileHelper.IsCornerSouthEast(typeAsInt)) {
+            tile = wallCornerSouthEast;
+        } else if (WallTileHelper.IsCornerNorthEast(typeAsInt)) {
+            tile = wallCornerNorthEast;
+        } else if (WallTileHelper.IsCornerNorthWest(typeAsInt)) {
+            tile = wallCornerNorthWest;
+        } else if (WallTileHelper.IsWallAll(typeAsInt) || WallTileHelper.wallFullEightDirections.Contains(typeAsInt)) {
             tile = wallFull;
-        }
-        else if (WallTileHelper.wallBottmEightDirections.Contains(typeAsInt)) {
-            tile = wallBottom;
+        } else if (WallTileHelper.wallSouthEightDirections.Contains(typeAsInt)) {
+            tile = wallSouth;
         }
 
         if (tile != null) {

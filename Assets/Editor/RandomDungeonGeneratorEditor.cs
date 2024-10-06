@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(AbstractDungeonGenerator), true)]
+[CustomEditor(typeof(DungeonGenerator), true)]
 public class RandomDungeonGeneratorEditor : Editor {
-    AbstractDungeonGenerator generator;
+    DungeonGenerator generator;
 
     private void Awake() {
-        generator = (AbstractDungeonGenerator)target;
+        generator = (DungeonGenerator)target;
     }
 
     public override void OnInspectorGUI() {

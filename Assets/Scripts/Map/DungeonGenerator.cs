@@ -1,8 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator {
+public class DungeonGenerator: MonoBehaviour {
+    [SerializeField]
+    protected TilemapVisualizer tilemapVisualizer = null;
+    [SerializeField]
+    private WallColliderGenerator wallColliderGenerator = null;
+    [SerializeField]
+    protected SimpleRandomWalkSO randomWalkParameters;
     [SerializeField]
     private int minRoomWidth = 4, minRoomHeight = 4;
     [SerializeField]
@@ -13,29 +20,23 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator {
     [SerializeField]
     private bool shouldUseRandomWalkRooms = false;
 
-    protected override void RunProceduralGeneration() {
-        Collider2D[] colliders = gameObject.GetComponents<Collider2D>();
-
-        foreach (var col in colliders) {
-            DestroyImmediate(col);
-        }
-
-        foreach(var child in gameObject.GetComponentsInChildren<BoxCollider2D>()) {
-            if (child.gameObject != gameObject) DestroyImmediate(child.gameObject);
-        }
-
-        CreateRooms();
+    protected void Awake() {
+        GenerateDungeon();
     }
 
-    private void CreateRooms() {
+    public void GenerateDungeon() {
+        tilemapVisualizer.Clear();
+        wallColliderGenerator.Clear();
+
+        //Vector3 startPosition = PlayerController.instance.transform.position;
+        Vector3 startPosition = Vector3.zero;
         var roomList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(
-            new BoundsInt((Vector3Int)startPosition,
-            new Vector3Int(dungeonWidth, dungeonHeight, 0)),
+            new BoundsInt(new Vector3Int((int)startPosition.x, (int)startPosition.y, (int)startPosition.z), new Vector3Int(dungeonWidth, dungeonHeight, 0)),
             minRoomWidth,
             minRoomHeight
         );
 
-        HashSet<Vector2Int> floor = new HashSet<Vector2Int>();
+        HashSet<Vector2Int> floor;
         if (shouldUseRandomWalkRooms) {
             floor = CreateRandomRooms(roomList);
         } else {
@@ -51,28 +52,7 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator {
 
         tilemapVisualizer.PaintFloorTiles(floor);
         List<Rect> wallColliders = WallGenerator.CreateWalls(floor, tilemapVisualizer);
-
-        Debug.Log("WALLS GENERATED");
-        Debug.Log(wallColliders.Count);
-
-        foreach(var wall in wallColliders) {
-            GameObject wallObj = new GameObject();
-            wallObj.transform.parent = transform;
-
-            Rigidbody2D rb = wallObj.AddComponent<Rigidbody2D>();
-            rb.freezeRotation = true;
-            rb.isKinematic = true;
-
-
-            var collider = wallObj.AddComponent<BoxCollider2D>();
-
-            var xOffset = wall.x + wall.width/2 + 0.5f;
-            var yOffset = wall.y + wall.height/2 + 1;
-
-            collider.offset = new Vector2(xOffset, yOffset);
-            collider.enabled = true;
-            collider.size = new Vector2(wall.width + 1, wall.height + 1);
-        }
+        wallColliderGenerator.CreateColliders(wallColliders);
     }
 
     private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomList) {
@@ -103,6 +83,19 @@ public class RoomFirstDungeonGenerator : SimpleRandomWalkDungeonGenerator {
             }
         }
         return floor;
+    }
+
+    private HashSet<Vector2Int> RunRandomWalk(SimpleRandomWalkSO parameters, Vector2Int position) {
+        var currentPosition = position;
+        HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
+        for (int i = 0; i < parameters.iterations; i++) {
+            var path = ProceduralGenerationAlgorithms.SimpleRandomWalk(currentPosition, parameters.walkLen);
+            floorPositions.UnionWith(path);
+            if (parameters.shouldRandomizeStartPerIteration) {
+                currentPosition = floorPositions.ElementAt(Random.Range(0, floorPositions.Count));
+            }
+        }
+        return floorPositions;
     }
 
     private HashSet<Vector2Int> ConnectRooms(List<Vector2Int> roomCenterPoints) {
