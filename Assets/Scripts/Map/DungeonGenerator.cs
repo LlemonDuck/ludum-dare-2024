@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 public class DungeonGenerator: MonoBehaviour {
     [SerializeField]
     protected TilemapVisualizer tilemapVisualizer = null;
+    [SerializeField]
+    private WallColliderGenerator wallColliderGenerator = null;
     [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
     [SerializeField]
@@ -25,10 +26,8 @@ public class DungeonGenerator: MonoBehaviour {
 
     public void GenerateDungeon() {
         tilemapVisualizer.Clear();
-        RunProceduralGeneration();
-    }
+        wallColliderGenerator.Clear();
 
-    protected void RunProceduralGeneration() {
         //Vector3 startPosition = PlayerController.instance.transform.position;
         Vector3 startPosition = Vector3.zero;
         var roomList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(
@@ -52,7 +51,8 @@ public class DungeonGenerator: MonoBehaviour {
         floor.UnionWith(corridors);
 
         tilemapVisualizer.PaintFloorTiles(floor);
-        WallGenerator.CreateWalls(floor, tilemapVisualizer);
+        List<Rect> wallColliders = WallGenerator.CreateWalls(floor, tilemapVisualizer);
+        wallColliderGenerator.CreateColliders(wallColliders);
     }
 
     private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomList) {
@@ -85,7 +85,7 @@ public class DungeonGenerator: MonoBehaviour {
         return floor;
     }
 
-    protected HashSet<Vector2Int> RunRandomWalk(SimpleRandomWalkSO parameters, Vector2Int position) {
+    private HashSet<Vector2Int> RunRandomWalk(SimpleRandomWalkSO parameters, Vector2Int position) {
         var currentPosition = position;
         HashSet<Vector2Int> floorPositions = new HashSet<Vector2Int>();
         for (int i = 0; i < parameters.iterations; i++) {

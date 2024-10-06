@@ -10,7 +10,6 @@ public static class WallGenerator {
         var cornerWallPositions = FindWallsInDirections(floorPositions, Direction2D.diagonalDirections);
         CreateBasicWalls(tilemapVisualizer, basicWallPositions, floorPositions);
         CreateCornerWalls(tilemapVisualizer, cornerWallPositions, floorPositions);
-        
 
         List<Rect> wallColliders = new List<Rect>(basicWallPositions.Count / 5);
 
