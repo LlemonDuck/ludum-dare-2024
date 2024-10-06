@@ -8,7 +8,6 @@ public static class WallGenerator {
     public static List<Rect> CreateWalls(HashSet<Vector2Int> floorPositions, TilemapVisualizer tilemapVisualizer) {
         var basicWallPositions = FindWallsInDirections(floorPositions, Direction2D.cardinalDirections);
         var cornerWallPositions = FindWallsInDirections(floorPositions, Direction2D.diagonalDirections);
-        // TODO: one method for both
         CreateBasicWalls(tilemapVisualizer, basicWallPositions, floorPositions);
         CreateCornerWalls(tilemapVisualizer, cornerWallPositions, floorPositions);
         

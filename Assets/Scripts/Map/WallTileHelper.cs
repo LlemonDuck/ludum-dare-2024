@@ -3,7 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public static class WallTileHelper {
-    public static HashSet<int> wallTop = new HashSet<int> {
+
+    public static bool IsCornerNorthEast(int input) {
+        return CheckBitMask(input, 0b00000100, 0b01010101);
+    }
+
+    public static bool IsCornerNorthEastOpen(int input) {
+        return CheckBitMask(input, 0b10100000, 0b11110001);
+    }
+
+    public static bool IsCornerNorthWest(int input) {
+        return CheckBitMask(input, 0b00010000, 0b01010101);
+    }
+
+    private static bool CheckBitMask(int input, byte andBm, byte orBm) {
+        return (input | orBm) == orBm && (input & andBm) == andBm;
+    }
+
+    public static HashSet<int> wallNorth = new HashSet<int> {
         0b1111,
         0b0110,
         0b0011,
@@ -15,19 +32,19 @@ public static class WallTileHelper {
         0b0111
     };
 
-    public static HashSet<int> wallSideLeft = new HashSet<int> {
+    public static HashSet<int> wallWest = new HashSet<int> {
         0b0100
     };
 
-    public static HashSet<int> wallSideRight = new HashSet<int> {
+    public static HashSet<int> wallEast = new HashSet<int> {
         0b0001
     };
 
-    public static HashSet<int> wallBottom = new HashSet<int> {
+    public static HashSet<int> wallSouth = new HashSet<int> {
         0b1000
     };
 
-    public static HashSet<int> wallInnerCornerDownLeft = new HashSet<int> {
+    public static HashSet<int> wallCornerNorthEastOpen = new HashSet<int> {
         0b11110001,
         0b11100000,
         0b11110000,
@@ -48,7 +65,7 @@ public static class WallTileHelper {
         0b10010001
     };
 
-    public static HashSet<int> wallInnerCornerDownRight = new HashSet<int> {
+    public static HashSet<int> wallCornerNorthWestOpen = new HashSet<int> {
         0b11000111,
         0b11000011,
         0b10000011,
@@ -69,20 +86,27 @@ public static class WallTileHelper {
         0b01000010
     };
 
-    public static HashSet<int> wallDiagonalCornerDownLeft = new HashSet<int> {
+    public static HashSet<int> wallCornerSouthEastOpen = new HashSet<int> {
+    };
+
+    public static HashSet<int> wallCornerSouthWestOpen = new HashSet<int> {
+
+    };
+
+    public static HashSet<int> wallCornerSouthWest = new HashSet<int> {
         0b01000000
     };
 
-    public static HashSet<int> wallDiagonalCornerDownRight = new HashSet<int> {
+    public static HashSet<int> wallCornerSouthEast = new HashSet<int> {
         0b00000001
     };
 
-    public static HashSet<int> wallDiagonalCornerUpLeft = new HashSet<int> {
+    public static HashSet<int> wallCornerNorthWest = new HashSet<int> {
         0b00010000,
         0b01010000,
     };
 
-    public static HashSet<int> wallDiagonalCornerUpRight = new HashSet<int> {
+    public static HashSet<int> wallCornerNorthEast = new HashSet<int> {
         0b00000100,
         0b00000101
     };
@@ -92,7 +116,6 @@ public static class WallTileHelper {
         0b0101,
         0b1101,
         0b1001
-
     };
 
     public static HashSet<int> wallFullEightDirections = new HashSet<int> {
@@ -130,10 +153,9 @@ public static class WallTileHelper {
         0b11010101,
         0b11010100,
         0b10010101
-
     };
 
-    public static HashSet<int> wallBottmEightDirections = new HashSet<int> {
+    public static HashSet<int> wallSouthEightDirections = new HashSet<int> {
         0b01000001
     };
 }
