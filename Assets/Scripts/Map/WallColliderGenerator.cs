@@ -15,7 +15,7 @@ public class WallColliderGenerator : MonoBehaviour {
 
     public void CreateColliders(List<Rect> wallColliders) {
         foreach(var wall in wallColliders) {
-            GameObject wallObj = new GameObject();
+            GameObject wallObj = new();
             wallObj.transform.parent = transform;
             Rigidbody2D rb = wallObj.AddComponent<Rigidbody2D>();
             rb.freezeRotation = true;

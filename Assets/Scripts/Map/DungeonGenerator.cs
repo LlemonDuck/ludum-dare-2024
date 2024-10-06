@@ -1,13 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class DungeonGenerator: MonoBehaviour {
     [SerializeField]
     protected TilemapVisualizer tilemapVisualizer = null;
     [SerializeField]
     private WallColliderGenerator wallColliderGenerator = null;
+    [SerializeField]
+    private GameObject workerPrefab = null;
     [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
     [SerializeField]
@@ -151,6 +155,7 @@ public class DungeonGenerator: MonoBehaviour {
         return corridor;
     }
 
+    // TODO: worker factory
     private void SetSpawnPoints(List<Vector2Int> roomCenterPoints, HashSet<Vector2Int> floorPositions) {
         // player should spawn in center of start room
         playerStartPosition = (Vector3Int)roomCenterPoints[0];
@@ -158,9 +163,13 @@ public class DungeonGenerator: MonoBehaviour {
         // queen should spawn in last room in list
         queenStartPosition = (Vector3Int)roomCenterPoints[^1];
 
-        // drones should spawn in random floor positions
-        //for () {
-
-        //}
+        // workers should spawn in random floor positions
+        List<Vector2Int> floorPositionsList = new(floorPositions);
+        int numWorkers = (int)Math.Sqrt(dungeonHeight * dungeonWidth) / 2;
+        for (int i = 0; i < numWorkers; i++) {
+            GameObject worker = Instantiate(workerPrefab);
+            Vector2Int workerPosition = floorPositionsList[Random.Range(0, floorPositions.Count)];
+            worker.transform.position = new(workerPosition.x, workerPosition.y); 
+        }
     }
 }
