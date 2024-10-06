@@ -23,7 +23,7 @@ public static class ProceduralGenerationAlgorithms {
     public static List<Vector2Int> RandomWalkCorridor(Vector2Int startPosition, int corridorLength) {
         List<Vector2Int> corridor = new List<Vector2Int>();
         var currentPosition = startPosition;
-        int directionIndex = UnityEngine.Random.Range(0, Direction2D.cardinalDirections.Count);
+        int directionIndex = Random.Range(0, Direction2D.cardinalDirections.Count);
         var direction = Direction2D.cardinalDirections[directionIndex];
         var perpendicularDirection90 = Direction2D.cardinalDirections[(directionIndex + 1) % Direction2D.cardinalDirections.Count];
         var perpendicularDirection270 = Direction2D.cardinalDirections[Mod(directionIndex - 1, Direction2D.cardinalDirections.Count)];
@@ -123,6 +123,6 @@ public static class Direction2D {
     };
 
     public static Vector2Int GetRandomCardinalDirection() {
-        return cardinalDirections[UnityEngine.Random.Range(0, cardinalDirections.Count)];
+        return cardinalDirections[Random.Range(0, cardinalDirections.Count)];
     }
 }
