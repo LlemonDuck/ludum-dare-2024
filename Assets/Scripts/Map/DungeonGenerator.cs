@@ -23,8 +23,10 @@ public class DungeonGenerator: MonoBehaviour {
     public static Vector3Int playerStartPosition = Vector3Int.zero;
 
     protected void Awake() {
+        Time.timeScale = 0.0f;
         List<Vector2Int> roomCenterPoints = GenerateDungeon();
         SetSpawnPoints(roomCenterPoints);
+        Time.timeScale = 1.0f;
     }
 
     public List<Vector2Int> GenerateDungeon() {
@@ -48,6 +50,7 @@ public class DungeonGenerator: MonoBehaviour {
         foreach(var room in roomList) {
             roomCenterPoints.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
         }
+        List<Vector2Int> roomCenterPointsCopy = new List<Vector2Int>(roomCenterPoints);
         HashSet<Vector2Int> corridors = ConnectRooms(roomCenterPoints);
         floor.UnionWith(corridors);
 
@@ -55,7 +58,7 @@ public class DungeonGenerator: MonoBehaviour {
         List<Rect> wallColliders = WallGenerator.CreateWalls(floor, tilemapVisualizer);
         wallColliderGenerator.CreateColliders(wallColliders);
 
-        return roomCenterPoints;
+        return roomCenterPointsCopy;
     }
 
     private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomList) {
