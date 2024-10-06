@@ -25,11 +25,18 @@ public class CarpenterAnt : BaseEnemy {
     public float woodCheckFrequency = 5.0f;
     private float woodChopTimer = 0.0f;
     public float woodChopDuration = 2.0f;
+    public float woodThrowDuration = 5.0f;
+    public float woodThrowDistance = 50.0f;
+    private float woodThrowTimer = 0.0f;
+    private Vector2 woodThrowDirection = Vector2.zero;
 
     private Vector2 lungeDirection = Vector2.zero;
     private Vector2 lungeStartPosition = Vector2.zero;
 
     private List<GameObject> woodObjects = new List<GameObject>();
+
+    public GameObject woodAttachPoint;
+    private GameObject throwingWood;
 
     public AnimationCurve lungeCurve;
 
@@ -120,7 +127,11 @@ public class CarpenterAnt : BaseEnemy {
     }
 
     void attachWood(GameObject wood) {
-        Debug.Log("WOOD IS CHOPPED");
+        wood.transform.parent = woodAttachPoint.transform;
+        woodThrowTimer = 0.0f;
+        throwingWood = wood;
+        woodThrowDirection = getPlayerOffset().normalized;
+        throwingWood.GetComponent<BoxCollider2D>().isTrigger = true;
     }
 
     void chopWood(GameObject wood) {
@@ -151,6 +162,28 @@ public class CarpenterAnt : BaseEnemy {
         if (isCollidingWithWood) chopWood(nearestWood);
     }
 
+    void throwingWoodState() {
+        rigidbody.velocity = Vector2.zero;
+        throwingWood.transform.rotation = Quaternion.identity;
+        transform.rotation = Quaternion.identity;
+
+        if (woodThrowTimer >= woodThrowDuration) {
+            switchState(BehaviourState.MOVING_TO_PLAYER);
+            woodCheckTimer = 0.0f;
+        }
+
+        float woodThrowResult = lungeCurve.Evaluate(woodThrowTimer/woodThrowDuration);
+        if (woodThrowResult < 0) {
+            throwingWood.transform.position = Vector2.Lerp(woodAttachPoint.transform.position, (Vector2)woodAttachPoint.transform.position - woodThrowDirection * woodThrowDistance, Mathf.Abs(woodThrowResult));
+        } else {
+            throwingWood.transform.position = Vector2.Lerp(woodAttachPoint.transform.position, (Vector2)woodAttachPoint.transform.position + woodThrowDirection * woodThrowDistance, woodThrowResult);
+        }
+
+        if (woodThrowTimer >= woodThrowDuration) {
+            switchState(BehaviourState.MOVING_TO_PLAYER);
+        }
+    }
+
     // Start is called before the first frame update
     void Start() {
     }
@@ -179,6 +212,7 @@ public class CarpenterAnt : BaseEnemy {
                 choppingWoodState();
                 break;
             case BehaviourState.THROWING_WOOD:
+                throwingWoodState();
                 break;
             case BehaviourState.PATROL:
                 patrolState(playerDirection);
@@ -203,6 +237,7 @@ public class CarpenterAnt : BaseEnemy {
 
         lungeTimer += Time.deltaTime;
         woodCheckTimer += Time.deltaTime;
+        woodThrowTimer += Time.deltaTime;
     }
 
 
