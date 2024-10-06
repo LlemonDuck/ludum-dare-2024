@@ -21,8 +21,8 @@ public class WallColliderGenerator : MonoBehaviour {
             rb.freezeRotation = true;
             rb.isKinematic = true;
             var collider = wallObj.AddComponent<BoxCollider2D>();
-            var xOffset = wall.x + wall.width/2;
-            var yOffset = wall.y + wall.height/2;
+            var xOffset = wall.x + (wall.width + 1) / 2;
+            var yOffset = wall.y + (wall.height + 2) / 2;
             collider.offset = new Vector2(xOffset, yOffset);
             collider.enabled = true;
             collider.size = new Vector2(wall.width + 1, wall.height + 1);

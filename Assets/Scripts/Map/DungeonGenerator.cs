@@ -23,10 +23,11 @@ public class DungeonGenerator: MonoBehaviour {
     public static Vector3Int playerStartPosition = Vector3Int.zero;
 
     protected void Awake() {
-        GenerateDungeon();
+        List<Vector2Int> roomCenterPoints = GenerateDungeon();
+        SetSpawnPoints(roomCenterPoints);
     }
 
-    public void GenerateDungeon() {
+    public List<Vector2Int> GenerateDungeon() {
         tilemapVisualizer.Clear();
         wallColliderGenerator.Clear();
 
@@ -47,13 +48,14 @@ public class DungeonGenerator: MonoBehaviour {
         foreach(var room in roomList) {
             roomCenterPoints.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
         }
-        playerStartPosition = (Vector3Int)roomCenterPoints[0];
         HashSet<Vector2Int> corridors = ConnectRooms(roomCenterPoints);
         floor.UnionWith(corridors);
 
         tilemapVisualizer.PaintFloorTiles(floor);
         List<Rect> wallColliders = WallGenerator.CreateWalls(floor, tilemapVisualizer);
         wallColliderGenerator.CreateColliders(wallColliders);
+
+        return roomCenterPoints;
     }
 
     private HashSet<Vector2Int> CreateSimpleRooms(List<BoundsInt> roomList) {
@@ -152,5 +154,14 @@ public class DungeonGenerator: MonoBehaviour {
             corridor.Add(position + Vector2Int.down);
         }
         return corridor;
+    }
+
+    private void SetSpawnPoints(List<Vector2Int> roomCenterPoints) {
+        // player should spawn in center of start room
+        playerStartPosition = (Vector3Int)roomCenterPoints[0];
+
+        // queen should spawn in last room in list
+
+        // drones should spawn in random floor positions
     }
 }
