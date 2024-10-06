@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4f74ca997f3e5c942a69e46e32da4796
+guid: 00cae87b7652d3fe384084e4d90a77b0
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ ScriptedImporter:
     addSortingGroup: 1
     addShadowCasters: 0
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638638385113393660
+  platformSettingsDirtyTick: 638638385056013510
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -121,18 +121,18 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: Portrait-Draft
+  - name: Nibbler Sprite
     originalName: 
-    pivot: {x: 0.5, y: -0.96875}
+    pivot: {x: 0.53846157, y: -0.84615386}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 46
-      height: 32
-    spriteID: 807783b436ea7fc4ea7fdc97943d9d62
+      width: 26
+      height: 13
+    spriteID: 26aff19c32bd9e259844b81334db2839
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,21 +144,21 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 497136475
-    name: Portrait-Draft
+    guid: -1989025679
+    name: Nibbler Sprite
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: Portrait-Draft
+    - name: Nibbler Sprite
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 9
-        y: 31
-        width: 46
-        height: 32
-      spriteId: 807783b436ea7fc4ea7fdc97943d9d62
+        x: 2
+        y: 11
+        width: 26
+        height: 13
+      spriteId: 26aff19c32bd9e259844b81334db2839
     linkedCells: []
     parentIndex: -1
   platformSettings:
@@ -213,4 +213,4 @@ ScriptedImporter:
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 64, y: 64}
+  canvasSize: {x: 32, y: 32}

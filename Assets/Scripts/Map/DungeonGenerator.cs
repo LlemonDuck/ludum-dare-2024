@@ -13,6 +13,8 @@ public class DungeonGenerator: MonoBehaviour {
     [SerializeField]
     private GameObject workerPrefab = null;
     [SerializeField]
+    private GameObject woodPrefab = null;
+    [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
     [SerializeField]
     private int minRoomWidth = 4, minRoomHeight = 4;
@@ -157,19 +159,28 @@ public class DungeonGenerator: MonoBehaviour {
 
     // TODO: worker factory
     private void SetSpawnPoints(List<Vector2Int> roomCenterPoints, HashSet<Vector2Int> floorPositions) {
-        // player should spawn in center of start room
-        playerStartPosition = (Vector3Int)roomCenterPoints[0];
-
-        // queen should spawn in last room in list
-        queenStartPosition = (Vector3Int)roomCenterPoints[^1];
+        List<Vector2Int> floorPositionsList = new(floorPositions);
 
         // workers should spawn in random floor positions
-        List<Vector2Int> floorPositionsList = new(floorPositions);
-        int numWorkers = (int)Math.Sqrt(dungeonHeight * dungeonWidth) / 2;
+        int numWorkers = (int)Math.Sqrt(Math.Sqrt(dungeonHeight * dungeonWidth));
         for (int i = 0; i < numWorkers; i++) {
             GameObject worker = Instantiate(workerPrefab);
             Vector2Int workerPosition = floorPositionsList[Random.Range(0, floorPositions.Count)];
             worker.transform.position = new(workerPosition.x, workerPosition.y); 
         }
+
+        // wood should spawn in random floor positions
+        int numWood = (int)Math.Sqrt(Math.Sqrt(dungeonHeight * dungeonWidth));
+        for (int i = 0; i < numWood; i++) {
+            GameObject wood = Instantiate(woodPrefab);
+            Vector2Int woodPosition = floorPositionsList[Random.Range(0, floorPositions.Count)];
+            wood.transform.position = new(woodPosition.x, woodPosition.y); 
+        }
+
+        // player should spawn in center of start room
+        playerStartPosition = (Vector3Int)roomCenterPoints[0];
+
+        // queen should spawn in last room in list
+        queenStartPosition = (Vector3Int)roomCenterPoints[^1];
     }
 }
