@@ -52,13 +52,13 @@ public class TilemapVisualizer : MonoBehaviour {
             tile = wallCornerNorthEastOpen;
         } else if (WallTileHelper.IsCornerNorthWestOpen(typeAsInt)) {
             tile = wallCornerNorthWestOpen;
-        } else if (WallTileHelper.wallCornerSouthEastOpen.Contains(typeAsInt)) {
+        } else if (WallTileHelper.IsCornerSouthEastOpen(typeAsInt)) {
             tile = wallCornerSouthEastOpen;
         } else if (WallTileHelper.IsCornerSouthWestOpen(typeAsInt)) {
             tile = wallCornerSouthWestOpen;
         } else if (WallTileHelper.IsCornerSouthWest(typeAsInt)) {
             tile = wallCornerSouthWest;
-        } else if (WallTileHelper.wallCornerSouthEast.Contains(typeAsInt)) {
+        } else if (WallTileHelper.IsCornerSouthEast(typeAsInt)) {
             tile = wallCornerSouthEast;
         } else if (WallTileHelper.IsCornerNorthEast(typeAsInt)) {
             tile = wallCornerNorthEast;
