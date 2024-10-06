@@ -28,16 +28,16 @@ public class TilemapVisualizer : MonoBehaviour {
     internal void PaintSingleBasicWall(Vector2Int position, string binaryType) {
         int typeAsInt = Convert.ToInt32(binaryType, 2);
         TileBase tile = null;
-        if (WallTileHelper.wallNorth.Contains(typeAsInt)) {
-            tile = wallNorth;
-        } else if (WallTileHelper.wallEast.Contains(typeAsInt)) {
-            tile = wallEast;
-        } else if (WallTileHelper.wallWest.Contains(typeAsInt)) {
-            tile = wallWest;
-        } else if (WallTileHelper.wallSouth.Contains(typeAsInt)) {
-            tile = wallSouth;
-        } else if (WallTileHelper.wallFull.Contains(typeAsInt)) {
+        if (typeAsInt == 0b1111) {
             tile = wallFull;
+        } else if (WallTileHelper.iswallNorth(typeAsInt)) {
+            tile = wallNorth;
+        } else if (WallTileHelper.isWallEast(typeAsInt)) {
+            tile = wallEast;
+        } else if (WallTileHelper.isWallWest(typeAsInt)) {
+            tile = wallWest;
+        } else if (WallTileHelper.iswallSouth(typeAsInt)) {
+            tile = wallSouth;
         }
 
         if (tile != null) { 
