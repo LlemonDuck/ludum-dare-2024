@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour {
         } else {
             Destroy(gameObject);
         }
+        transform.position = DungeonGenerator.playerStartPosition;
     }
 
     private bool isInIFrame() {

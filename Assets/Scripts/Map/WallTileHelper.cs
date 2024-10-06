@@ -60,4 +60,46 @@ public static class WallTileHelper {
     private static bool CheckBitMask(int input, byte andBm, byte orBm) {
         return (input | orBm) == orBm && (input & andBm) == andBm;
     }
+
+    public static HashSet<int> wallSouthEightDirections = new HashSet<int> {
+        0b01000001
+    };
+
+    // TODO: bitmask
+    public static HashSet<int> wallFullEightDirections = new HashSet<int> {
+        0b00010100,
+        0b11100100,
+        0b10010011,
+        0b01110100,
+        0b00010111,
+        0b00010110,
+        0b00110100,
+        0b00010101,
+        0b01010100,
+        0b00010010,
+        0b00100100,
+        0b00010011,
+        0b01100100,
+        0b10010111,
+        0b11110100,
+        0b10010110,
+        0b10110100,
+        0b11100101,
+        0b11010011,
+        0b11110101,
+        0b11010111,
+        0b11010111,
+        0b11110101,
+        0b01110101,
+        0b01010111,
+        0b01100101,
+        0b01010011,
+        0b01010010,
+        0b00100101,
+        0b00110101,
+        0b01010110,
+        0b11010101,
+        0b11010100,
+        0b10010101
+    };
 }

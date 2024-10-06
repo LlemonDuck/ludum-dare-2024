@@ -20,6 +20,8 @@ public class DungeonGenerator: MonoBehaviour {
     [SerializeField]
     private bool shouldUseRandomWalkRooms = false;
 
+    public static Vector3Int playerStartPosition = Vector3Int.zero;
+
     protected void Awake() {
         GenerateDungeon();
     }
@@ -28,10 +30,8 @@ public class DungeonGenerator: MonoBehaviour {
         tilemapVisualizer.Clear();
         wallColliderGenerator.Clear();
 
-        //Vector3 startPosition = PlayerController.instance.transform.position;
-        Vector3 startPosition = Vector3.zero;
         var roomList = ProceduralGenerationAlgorithms.BinarySpacePartitioning(
-            new BoundsInt(new Vector3Int((int)startPosition.x, (int)startPosition.y, (int)startPosition.z), new Vector3Int(dungeonWidth, dungeonHeight, 0)),
+            new BoundsInt(Vector3Int.zero, new Vector3Int(dungeonWidth, dungeonHeight, 0)),
             minRoomWidth,
             minRoomHeight
         );
@@ -47,6 +47,7 @@ public class DungeonGenerator: MonoBehaviour {
         foreach(var room in roomList) {
             roomCenterPoints.Add((Vector2Int)Vector3Int.RoundToInt(room.center));
         }
+        playerStartPosition = (Vector3Int)roomCenterPoints[0];
         HashSet<Vector2Int> corridors = ConnectRooms(roomCenterPoints);
         floor.UnionWith(corridors);
 
