@@ -50,7 +50,7 @@ public class Fireball : MonoBehaviour {
     // TODO: Light branches on fire? 
     // TODO: come up with more ideas :) 
 
-    void OnCollisionEnter2D(Collision2D collision) {
+    void OnTriggerEnter2D(Collider2D collision) {
         if (!active) return;
         collision.gameObject.TryGetComponent(out PlayerController player);
         collision.gameObject.TryGetComponent(out BaseEnemy enemy);

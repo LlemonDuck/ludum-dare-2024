@@ -19,10 +19,17 @@ public class CarpenterAnt : BaseEnemy {
 
     public float lungeTimer = 0.0f;
 
+    private bool isCollidingWithWood = false;
+
+    private float woodCheckTimer = 0.0f;
+    public float woodCheckFrequency = 5.0f;
+    private float woodChopTimer = 0.0f;
+    public float woodChopDuration = 2.0f;
+
     private Vector2 lungeDirection = Vector2.zero;
     private Vector2 lungeStartPosition = Vector2.zero;
 
-    private List<GameObject> woodObjects;
+    private List<GameObject> woodObjects = new List<GameObject>();
 
     public AnimationCurve lungeCurve;
 
@@ -30,10 +37,13 @@ public class CarpenterAnt : BaseEnemy {
         MOVING_TO_PLAYER,
         ATTACKING_PLAYER,
         CHOPPING_WOOD,
+        THROWING_WOOD,
         PATROL,
     }
 
     void switchState(BehaviourState newState) {
+        Debug.Log(newState);
+
         switch (newState) {
             case BehaviourState.ATTACKING_PLAYER:
                 if (lungeTimer <= lungeCooldown) {
@@ -88,16 +98,75 @@ public class CarpenterAnt : BaseEnemy {
             rigidbody.position = Vector2.Lerp(lungeStartPosition, lungeStartPosition + lungeDirection * lungeDistance, lungeCurveResult);
         }
 
-        if (lungeTimer >= lungeChargeTime && lungeTimer <= lungeCooldown && isCollidingWithPlayer) {
+        if (lungeTimer >= lungeChargeTime && lungeTimer <= lungeDuration && isCollidingWithPlayer) {
             PlayerController.instance.applyDamage(lungeDamage);
         }
+    }
+
+    void moveToWood(Vector2 woodPosition) {
+        Vector2 moveDirection = (woodPosition - (Vector2)transform.position).normalized;
+
+        if (!isCollidingWithPlayer) {
+            Vector2 maxSpeed = moveDirection * moveSpeed;
+
+            rigidbody.velocity += maxSpeed * Time.deltaTime/0.1f;
+
+            if (Mathf.Abs(Vector2.Dot(rigidbody.velocity.normalized, maxSpeed.normalized) - 1) < 0.2f) {
+                if (rigidbody.velocity.magnitude >= maxSpeed.magnitude) {
+                    rigidbody.velocity = maxSpeed;
+                }
+            }
+        }
+    }
+
+    void attachWood(GameObject wood) {
+        Debug.Log("WOOD IS CHOPPED");
+    }
+
+    void chopWood(GameObject wood) {
+        woodChopTimer += Time.deltaTime;
+
+        if (woodCheckTimer >= woodChopDuration) {
+            switchState(BehaviourState.THROWING_WOOD);
+            attachWood(wood);
+        }
+    }
+
+    void choppingWoodState() {
+        GameObject nearestWood = null;
+        float nearestDistance = 10000000f;
+
+        foreach(GameObject wood in woodObjects) {
+            float woodDistance = Vector2.Distance(transform.position, wood.transform.position);
+
+            if (woodDistance < nearestDistance) {
+                nearestWood = wood;
+                nearestDistance = woodDistance;
+            }
+        }
+
+        if (nearestWood == null || timeSinceDamage < 0.1f) switchState(BehaviourState.MOVING_TO_PLAYER);
+        
+        if (!isCollidingWithWood) moveToWood(nearestWood.transform.position);
+        if (isCollidingWithWood) chopWood(nearestWood);
     }
 
     // Start is called before the first frame update
     void Start() {
     }
+
     void applyState() {
         Vector2 playerDirection = getPlayerOffset();
+
+        if (currentState != BehaviourState.CHOPPING_WOOD && currentState != BehaviourState.THROWING_WOOD) {
+            if (woodCheckTimer >= woodCheckFrequency) {
+                if (Random.Range(0.0f, 1.0f) <= 0.4f && woodObjects.Count > 0) {
+                    switchState(BehaviourState.CHOPPING_WOOD);
+                }
+
+                woodCheckTimer = 0.0f;
+            }
+        }
 
         switch (currentState) {
             case BehaviourState.MOVING_TO_PLAYER:
@@ -105,6 +174,11 @@ public class CarpenterAnt : BaseEnemy {
                 break;
             case BehaviourState.ATTACKING_PLAYER:
                 attackState(playerDirection);
+                break;
+            case BehaviourState.CHOPPING_WOOD:
+                choppingWoodState();
+                break;
+            case BehaviourState.THROWING_WOOD:
                 break;
             case BehaviourState.PATROL:
                 patrolState(playerDirection);
@@ -128,21 +202,48 @@ public class CarpenterAnt : BaseEnemy {
         } while (stateBeforeUpdate != stateAfterUpdate);
 
         lungeTimer += Time.deltaTime;
+        woodCheckTimer += Time.deltaTime;
     }
+
 
     protected override void OnCollisionEnter2D(Collision2D collision) {
-        if ( collision.gameObject == PlayerController.instance.gameObject
-            && collision.collider == damageCollider
-        ) {
-            isCollidingWithPlayer = true;
-        } 
+        isCollidingWithPlayer = collision.gameObject == PlayerController.instance.gameObject;
+
+        collision.gameObject.TryGetComponent(out WoodLog logScript);
+        if (logScript != null) {
+            if (!isCollidingWithWood) woodChopTimer = 0.0f;
+            isCollidingWithWood = true;
+        }
     }
 
-    protected virtual void OnCollisionExit2D(Collision2D collision) {
-        if ( collision.gameObject == PlayerController.instance.gameObject
-            && collision.collider == damageCollider
-        ) {
+    // TODO: Change to be script reference
+    protected override void OnCollisionExit2D(Collision2D collision) {
+        if (collision.gameObject == PlayerController.instance.gameObject) {
             isCollidingWithPlayer = false;
-        } 
+        }
+
+        collision.gameObject.TryGetComponent(out WoodLog logScript);
+        if (logScript != null) {
+            isCollidingWithWood = false;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider) {
+        Debug.Log($"TRIGGER ENTER {collider.gameObject.name}");
+        collider.gameObject.TryGetComponent(out WoodLog logScript);
+
+        if (logScript != null) {
+            Debug.Log("WOOD ENTER");
+            woodObjects.Add(logScript.gameObject);
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D collider) {
+        collider.gameObject.TryGetComponent(out WoodLog logScript);
+
+        if (logScript != null) {
+            Debug.Log("WOOD REMOVE");
+            woodObjects.Remove(logScript.gameObject);
+        }
     }
 }
