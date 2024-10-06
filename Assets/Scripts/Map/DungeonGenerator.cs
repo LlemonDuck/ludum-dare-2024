@@ -11,9 +11,13 @@ public class DungeonGenerator: MonoBehaviour {
     [SerializeField]
     private WallColliderGenerator wallColliderGenerator = null;
     [SerializeField]
-    private GameObject workerPrefab = null;
+    private GameObject workerAntPrefab = null;
     [SerializeField]
     private GameObject woodPrefab = null;
+    [SerializeField]
+    private GameObject fireAntPrefab = null;
+    [SerializeField]
+    private GameObject carpenterAntPrefab = null;
     [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
     [SerializeField]
@@ -157,14 +161,13 @@ public class DungeonGenerator: MonoBehaviour {
         return corridor;
     }
 
-    // TODO: worker factory
     private void SetSpawnPoints(List<Vector2Int> roomCenterPoints, HashSet<Vector2Int> floorPositions) {
         List<Vector2Int> floorPositionsList = new(floorPositions);
 
         // workers should spawn in random floor positions
         int numWorkers = (int)Math.Sqrt(Math.Sqrt(dungeonHeight * dungeonWidth));
         for (int i = 0; i < numWorkers; i++) {
-            GameObject worker = Instantiate(workerPrefab);
+            GameObject worker = Instantiate(workerAntPrefab);
             Vector2Int workerPosition = floorPositionsList[Random.Range(0, floorPositions.Count)];
             worker.transform.position = new(workerPosition.x, workerPosition.y); 
         }
@@ -182,5 +185,13 @@ public class DungeonGenerator: MonoBehaviour {
 
         // queen should spawn in last room in list
         queenStartPosition = (Vector3Int)roomCenterPoints[^1];
+
+        GameObject carpenterAnt = Instantiate(carpenterAntPrefab);
+        Vector2Int carpenterAntPosition = floorPositionsList[1];
+        carpenterAnt.transform.position = new(carpenterAntPosition.x, carpenterAntPosition.y); 
+
+        GameObject fireAnt = Instantiate(fireAntPrefab);
+        Vector2Int fireAntPosition = floorPositionsList[^2];
+        fireAnt.transform.position = new(fireAntPosition.x, fireAntPosition.y); 
     }
 }

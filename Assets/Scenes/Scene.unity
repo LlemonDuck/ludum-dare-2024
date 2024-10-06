@@ -75329,6 +75329,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemapVisualizer: {fileID: 1144033053}
   wallColliderGenerator: {fileID: 482603316}
+  workerAntPrefab: {fileID: 6681072344698168976, guid: 5a99c9a52d040f943a001d5703ea8ad6, type: 3}
+  woodPrefab: {fileID: 3040329164646507679, guid: 58e381911e6661a4aafe9004658fabeb, type: 3}
+  fireAntPrefab: {fileID: 7545151630482755183, guid: be60a5eaa5bab6f4b966babf879e9125, type: 3}
+  carpenterAntPrefab: {fileID: 7413301872722455146, guid: 78f22e3c4b551664aaecca3574d90682, type: 3}
   randomWalkParameters: {fileID: 11400000, guid: adcafbd48c6f67c519f18597c9ef72ec, type: 2}
   minRoomWidth: 20
   minRoomHeight: 15
