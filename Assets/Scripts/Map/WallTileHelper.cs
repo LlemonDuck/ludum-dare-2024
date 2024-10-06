@@ -17,7 +17,7 @@ public static class WallTileHelper {
     }
 
     public static bool IsCornerNorthWestOpen(int input) {
-        return CheckBitMask(input, 0b10000010, 0b11000110);
+        return CheckBitMask(input, 0b10000010, 0b11000111);
     }
 
     public static bool IsCornerSouthWest(int input) {
@@ -26,6 +26,14 @@ public static class WallTileHelper {
 
     public static bool IsCornerSouthWestOpen(int input) {
         return CheckBitMask(input, 0b00001010, 0b00011111);
+    }
+
+    public static bool IsCornerSouthEast(int input) {
+        return CheckBitMask(input, 0b00000001, 0b01010101);
+    }
+
+    public static bool IsCornerSouthEastOpen(int input) {
+        return CheckBitMask(input, 0b00101000, 0b01111100);
     }
 
     private static bool CheckBitMask(int input, byte andBm, byte orBm) {
