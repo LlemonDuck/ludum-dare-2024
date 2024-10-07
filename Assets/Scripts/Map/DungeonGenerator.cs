@@ -19,6 +19,8 @@ public class DungeonGenerator: MonoBehaviour {
     [SerializeField]
     private GameObject carpenterAntPrefab = null;
     [SerializeField]
+    private GameObject queenAntPrefab = null;
+    [SerializeField]
     protected SimpleRandomWalkSO randomWalkParameters;
     [SerializeField]
     private int minRoomWidth = 4, minRoomHeight = 4;
@@ -29,11 +31,11 @@ public class DungeonGenerator: MonoBehaviour {
     private int offset = 1;
 
     public static Vector3Int playerSpawnPosition = Vector3Int.zero;
-    public static Vector3Int queenSpawnPosition = Vector3Int.zero;
     private List<Vector3Int> workerAntSpawnPositions = new();
     private List<Vector3Int> woodSpawnPositions = new();
     private Vector3Int carpenterAntSpawnPosition = Vector3Int.zero;
     private Vector3Int fireAntSpawnPosition = Vector3Int.zero;
+    private Vector3Int queenAntSpawnPosition = Vector3Int.zero;
 
     protected void Awake() {
         Time.timeScale = 0.0f;
@@ -179,22 +181,23 @@ public class DungeonGenerator: MonoBehaviour {
         playerSpawnPosition = (Vector3Int)roomCenterPoints[0];
         carpenterAntSpawnPosition = (Vector3Int)floorPositionsList[1];
         fireAntSpawnPosition = (Vector3Int)floorPositionsList[^2];
-        queenSpawnPosition = (Vector3Int)roomCenterPoints[^1];
+        queenAntSpawnPosition = (Vector3Int)roomCenterPoints[^1];
     }
 
     private void SpawnEntities() {
         foreach(Vector3Int position in workerAntSpawnPositions) {
-            GameObject worker = Instantiate(workerAntPrefab);
-            worker.transform.position = position;
+            SpawnEntityAtPosition(workerAntPrefab, position);
         }
         foreach(Vector3Int position in woodSpawnPositions) {
-            GameObject wood = Instantiate(woodPrefab);
-            wood.transform.position = position;
+            SpawnEntityAtPosition(woodPrefab, position);
         }
+        SpawnEntityAtPosition(carpenterAntPrefab, carpenterAntSpawnPosition);
+        SpawnEntityAtPosition(fireAntPrefab, fireAntSpawnPosition);
+        SpawnEntityAtPosition(queenAntPrefab, queenAntSpawnPosition);
+    }
 
-        GameObject carpenterAnt = Instantiate(carpenterAntPrefab);
-        carpenterAnt.transform.position = carpenterAntSpawnPosition;
-        GameObject fireAnt = Instantiate(fireAntPrefab);
-        fireAnt.transform.position = fireAntSpawnPosition;
+    private void SpawnEntityAtPosition(GameObject entityPrefab, Vector3Int position) {
+        GameObject entity = Instantiate(entityPrefab);
+        entity.transform.position = position;
     }
 }
