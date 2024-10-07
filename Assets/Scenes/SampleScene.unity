@@ -368,14 +368,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 137857431648399880, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.89
-      objectReference: {fileID: 0}
-    - target: {fileID: 137857431648399880, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.7
-      objectReference: {fileID: 0}
     - target: {fileID: 168944600242437961, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.7
@@ -416,73 +408,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4521375357189395713, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -2.22
-      objectReference: {fileID: 0}
-    - target: {fileID: 4521375357189395713, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.22
-      objectReference: {fileID: 0}
-    - target: {fileID: 5525134299294417048, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -2710814316159245398, guid: 0025c3282416dac4ebe247c7930a9d2e, type: 3}
-    - target: {fileID: 7016480741202907064, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.58
-      objectReference: {fileID: 0}
-    - target: {fileID: 7016480741202907064, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3.35
-      objectReference: {fileID: 0}
     - target: {fileID: 7531172353360541882, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
       propertyPath: m_Name
       value: QueenAnt
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957679045773586845, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_Size.x
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957679045773586845, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_Size.y
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957679045773586845, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_Offset.y
-      value: 1.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957679045773586845, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_SpriteTilingProperty.pivot.x
-      value: 0.4827586
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957679045773586845, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_SpriteTilingProperty.pivot.y
-      value: -0.31428573
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957679045773586845, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 3.625
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957679045773586845, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 2.1875
-      objectReference: {fileID: 0}
-    - target: {fileID: 8401914169878227013, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8401914169878227013, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831460455188890346, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.45
-      objectReference: {fileID: 0}
-    - target: {fileID: 8831460455188890346, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.54
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
