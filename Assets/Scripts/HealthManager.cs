@@ -8,6 +8,6 @@ public class HealthManager : MonoBehaviour {
     private Image healthBar = null;
 
     public void Update() {
-        healthBar.fillAmount = PlayerController.instance.health;
+        healthBar.fillAmount = PlayerController.instance.health / 100.0f;
     }
 }
