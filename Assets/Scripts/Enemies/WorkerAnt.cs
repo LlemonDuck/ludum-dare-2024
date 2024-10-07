@@ -136,7 +136,7 @@ public class WorkerAnt : BaseEnemy {
     }
 
     public void Revive () {
-        GetComponent<CircleCollider2D>().enabled = true;
+        GetComponent<BoxCollider2D>().enabled = true;
         health = 100;
         alive = true;
         rigidbody.isKinematic = false;

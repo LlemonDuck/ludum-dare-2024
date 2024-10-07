@@ -119,7 +119,7 @@ public class QueenAnt : BaseEnemy {
     }
 
     WorkerAnt spawnAnt(Transform point) {
-        var ant = workerPool.First(worker => !worker.GetComponent<CircleCollider2D>().enabled);
+        var ant = workerPool.First(worker => !worker.GetComponent<BoxCollider2D>().enabled);
 
         if (ant != null) {
             ant.GetComponent<WorkerAnt>().Revive();

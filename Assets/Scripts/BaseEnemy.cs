@@ -118,7 +118,9 @@ public class BaseEnemy : MonoBehaviour {
 
     public virtual void OnKilled() {
         alive = false;
-        GetComponent<CircleCollider2D>().enabled = false;
+        foreach (Collider2D col in GetComponents<Collider2D>()) {
+            col.enabled = false;
+        }
         GetComponent<SpriteRenderer>().color = new Color(0.3f, 0, 0, 1);
         rigidbody.isKinematic = true;
         rigidbody.velocity = Vector2.zero;
