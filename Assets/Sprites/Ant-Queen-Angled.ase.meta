@@ -123,15 +123,15 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: Ant-Queen-Angled
     originalName: 
-    pivot: {x: 0.44444445, y: -0.77272725}
+    pivot: {x: 0.4827586, y: -0.31428573}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 54
-      height: 22
+      width: 58
+      height: 35
     spriteID: 21b356b207f853743a523077a9c330dc
     spriteBone: []
     spriteOutline: []
@@ -154,10 +154,10 @@ ScriptedImporter:
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 8
-        y: 17
-        width: 54
-        height: 22
+        x: 4
+        y: 11
+        width: 58
+        height: 35
       spriteId: 21b356b207f853743a523077a9c330dc
     linkedCells: []
     parentIndex: -1
