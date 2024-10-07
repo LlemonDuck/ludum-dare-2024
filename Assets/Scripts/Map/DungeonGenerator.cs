@@ -28,12 +28,17 @@ public class DungeonGenerator: MonoBehaviour {
     [Range(0,10)]
     private int offset = 1;
 
-    public static Vector3Int playerStartPosition = Vector3Int.zero;
-    public static Vector3Int queenStartPosition = Vector3Int.zero;
+    public static Vector3Int playerSpawnPosition = Vector3Int.zero;
+    public static Vector3Int queenSpawnPosition = Vector3Int.zero;
+    private List<Vector3Int> workerAntSpawnPositions = new();
+    private List<Vector3Int> woodSpawnPositions = new();
+    private Vector3Int carpenterAntSpawnPosition = Vector3Int.zero;
+    private Vector3Int fireAntSpawnPosition = Vector3Int.zero;
 
     protected void Awake() {
         Time.timeScale = 0.0f;
         GenerateDungeon();
+        SpawnEntities();
         Time.timeScale = 1.0f;
     }
 
@@ -164,34 +169,32 @@ public class DungeonGenerator: MonoBehaviour {
     private void SetSpawnPoints(List<Vector2Int> roomCenterPoints, HashSet<Vector2Int> floorPositions) {
         List<Vector2Int> floorPositionsList = new(floorPositions);
 
-        // workers should spawn in random floor positions
-        int numWorkers = (int)Math.Sqrt(Math.Sqrt(dungeonHeight * dungeonWidth));
-        for (int i = 0; i < numWorkers; i++) {
+        // workers and wood should spawn in random floor positions
+        int numCommonSpawns = (int)Math.Sqrt(Math.Sqrt(dungeonHeight * dungeonWidth));
+        for (int i = 0; i < numCommonSpawns; i++) {
+            workerAntSpawnPositions.Add((Vector3Int)floorPositionsList[Random.Range(0, floorPositions.Count)]);
+            woodSpawnPositions.Add((Vector3Int)floorPositionsList[Random.Range(0, floorPositions.Count)]);
+        }
+
+        playerSpawnPosition = (Vector3Int)roomCenterPoints[0];
+        carpenterAntSpawnPosition = (Vector3Int)floorPositionsList[1];
+        fireAntSpawnPosition = (Vector3Int)floorPositionsList[^2];
+        queenSpawnPosition = (Vector3Int)roomCenterPoints[^1];
+    }
+
+    private void SpawnEntities() {
+        foreach(Vector3Int position in workerAntSpawnPositions) {
             GameObject worker = Instantiate(workerAntPrefab);
-            Vector2Int workerPosition = floorPositionsList[Random.Range(0, floorPositions.Count)];
-            worker.transform.position = new(workerPosition.x, workerPosition.y); 
+            worker.transform.position = position;
         }
-
-        // wood should spawn in random floor positions
-        int numWood = (int)Math.Sqrt(Math.Sqrt(dungeonHeight * dungeonWidth));
-        for (int i = 0; i < numWood; i++) {
+        foreach(Vector3Int position in woodSpawnPositions) {
             GameObject wood = Instantiate(woodPrefab);
-            Vector2Int woodPosition = floorPositionsList[Random.Range(0, floorPositions.Count)];
-            wood.transform.position = new(woodPosition.x, woodPosition.y); 
+            wood.transform.position = position;
         }
-
-        // player should spawn in center of start room
-        playerStartPosition = (Vector3Int)roomCenterPoints[0];
-
-        // queen should spawn in last room in list
-        queenStartPosition = (Vector3Int)roomCenterPoints[^1];
 
         GameObject carpenterAnt = Instantiate(carpenterAntPrefab);
-        Vector2Int carpenterAntPosition = floorPositionsList[1];
-        carpenterAnt.transform.position = new(carpenterAntPosition.x, carpenterAntPosition.y); 
-
+        carpenterAnt.transform.position = carpenterAntSpawnPosition;
         GameObject fireAnt = Instantiate(fireAntPrefab);
-        Vector2Int fireAntPosition = floorPositionsList[^2];
-        fireAnt.transform.position = new(fireAntPosition.x, fireAntPosition.y); 
+        fireAnt.transform.position = fireAntSpawnPosition;
     }
 }
