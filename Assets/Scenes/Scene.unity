@@ -78839,6 +78839,7 @@ MonoBehaviour:
   woodPrefab: {fileID: 3040329164646507679, guid: 58e381911e6661a4aafe9004658fabeb, type: 3}
   fireAntPrefab: {fileID: 7545151630482755183, guid: be60a5eaa5bab6f4b966babf879e9125, type: 3}
   carpenterAntPrefab: {fileID: 7413301872722455146, guid: 78f22e3c4b551664aaecca3574d90682, type: 3}
+  queenAntPrefab: {fileID: 7531172353360541882, guid: 60380f3ccd2ecd142abb690cd1eab91e, type: 3}
   randomWalkParameters: {fileID: 11400000, guid: adcafbd48c6f67c519f18597c9ef72ec, type: 2}
   minRoomWidth: 20
   minRoomHeight: 15
