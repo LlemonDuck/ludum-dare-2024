@@ -93,6 +93,7 @@ public class WorkerAnt : BaseEnemy {
     // Start is called before the first frame update
     void Start() {
     }
+
     void applyState() {
         Vector2 playerDirection = getPlayerOffset();
 
@@ -111,6 +112,7 @@ public class WorkerAnt : BaseEnemy {
 
     // Update is called once per frame
     protected override void Update() {
+        if (!alive) return;
         base.Update();
 
         BehaviourState stateBeforeUpdate = currentState;
@@ -125,5 +127,20 @@ public class WorkerAnt : BaseEnemy {
         } while (stateBeforeUpdate != stateAfterUpdate);
 
         lungeTimer += Time.deltaTime;
+    }
+
+    protected override void OnCollisionNotPlayer(Collision2D collision) {
+        if (currentState == BehaviourState.ATTACKING_PLAYER) {
+            switchState(BehaviourState.MOVING_TO_PLAYER);
+        }
+    }
+
+    public void Revive () {
+        GetComponent<CircleCollider2D>().enabled = true;
+        health = 100;
+        alive = true;
+        rigidbody.isKinematic = false;
+        GetComponent<SpriteRenderer>().color = Color.white;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 }
